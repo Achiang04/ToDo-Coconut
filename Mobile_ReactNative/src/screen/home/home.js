@@ -1,37 +1,55 @@
 import React, {useState} from 'react';
 import {View, Text, TouchableOpacity, FlatList} from 'react-native';
-import Buttons from '../../reusable/buttons/buttons';
 import styles from './homeStyle';
+import Modal from '../../reusable/modal/modal';
 
 export default function home() {
-  const [data] = useState([
-    {
-      id: 1,
-      todo: 'makan',
-      description: 'makan siang jam 12 nanti',
-      done: false,
-    },
-    {
-      id: 2,
-      todo: 'tidur',
-      description: 'makan siang jam 12 nanti',
-      done: true,
-    },
-    {
-      id: 3,
-      todo: 'main',
-      description: 'makan siang jam 12 nanti',
-      done: false,
-    },
-  ]);
+  const [data, setData] = useState({
+    item: [
+      {
+        id: 1,
+        todo: 'Lunch',
+        description: 'Lunch will be at 1 pm',
+        done: false,
+      },
+      {
+        id: 2,
+        todo: 'Take a nap',
+        description: 'tidur siang jam 2 nanti',
+        done: true,
+      },
+      {
+        id: 3,
+        todo: 'Watching',
+        description: 'main jam 4 nanti',
+        done: false,
+      },
+      {
+        id: 4,
+        todo: 'Buy a cake',
+        description: 'makan siang jam 6 nanti',
+        done: true,
+      },
+    ],
+  });
 
-  const RenderTodo = ({item}) => {
+  const handleComplete = (index) => {
+    let {item} = {...data};
+    item[index]['done'] = !item[index]['done'];
+    setData({item});
+  };
+
+  const RenderTodo = ({item, index}) => {
     return item.done ? (
-      <TouchableOpacity style={styles.todoContainerSelected}>
+      <TouchableOpacity
+        style={styles.todoContainerSelected}
+        onPress={() => handleComplete(index)}>
         <Text style={styles.todoTextSelected}>{item.todo}</Text>
       </TouchableOpacity>
     ) : (
-      <TouchableOpacity style={styles.todoContainer}>
+      <TouchableOpacity
+        style={styles.todoContainer}
+        onPress={() => handleComplete(index)}>
         <Text style={styles.todoText}>{item.todo}</Text>
       </TouchableOpacity>
     );
@@ -40,15 +58,17 @@ export default function home() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Todos</Text>
-      <FlatList
-        data={data}
-        keyExtractor={(item) => item.id}
-        renderItem={({item}) => {
-          return <RenderTodo item={item} />;
-        }}
-      />
+      <View>
+        <FlatList
+          data={data.item}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({item, index}) => {
+            return <RenderTodo item={item} index={index} />;
+          }}
+        />
+      </View>
       <View style={styles.button}>
-        <Buttons text={'New Todo'} />
+        <Modal />
       </View>
     </View>
   );

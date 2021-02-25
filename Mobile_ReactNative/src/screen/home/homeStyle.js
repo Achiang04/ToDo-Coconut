@@ -41,7 +41,9 @@ const styles = StyleSheet.create({
     opacity: 0.3,
   },
   button: {
-    marginBottom: hp(20),
+    position: 'absolute',
+    bottom: hp(20),
+    width: '100%',
   },
 });
 
