@@ -62,6 +62,9 @@ const styles = StyleSheet.create({
     fontSize: RFPercentage(2.2),
     textDecorationLine: 'line-through',
   },
+  status: {
+    color: '#fff',
+  },
 });
 
 export default styles;

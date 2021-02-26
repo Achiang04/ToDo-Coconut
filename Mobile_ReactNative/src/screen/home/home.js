@@ -1,50 +1,39 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Text, TouchableOpacity, FlatList} from 'react-native';
+
 import CheckBox from '@react-native-community/checkbox';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import styles from './homeStyle';
 import Modal from '../../reusable/modal/modal';
 
 export default function home() {
   const [selectedId, setSelectedId] = useState(null);
-  const [data, setData] = useState({
-    item: [
-      {
-        id: 1,
-        todo: 'Lunch',
-        description: 'Lunch will be at 1 pm',
-        done: false,
-      },
-      {
-        id: 2,
-        todo: 'Take a nap',
-        description: 'take a nap at 2 later',
-        done: true,
-      },
-      {
-        id: 3,
-        todo: 'Watching',
-        description: 'watching nobita s2 this afternoon',
-        done: false,
-      },
-      {
-        id: 4,
-        todo: 'Buy cake',
-        description: 'buy cake tonight',
-        done: true,
-      },
-    ],
-  });
+  const [dataStorage, setDataStorage] = useState([]);
 
-  const handleComplete = (index) => {
-    let {item} = {...data};
-    item[index]['done'] = !item[index]['done'];
-    setData({item});
+  const getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('@storage_Key');
+      setDataStorage(JSON.parse(jsonValue));
+    } catch (e) {
+      console.log(e);
+    }
   };
 
+  useEffect(() => {
+    getData();
+  }, []);
+
+  console.log('dataStorage', dataStorage);
   console.log(selectedId);
 
-  const RenderTodo = ({item, index}) => {
+  const handleCompleteStorage = (index) => {
+    let {item} = {...dataStorage};
+    item[index]['done'] = !item[index]['done'];
+    setDataStorage({item});
+  };
+
+  const RenderTodoStorage = ({item, index}) => {
     let tambahan;
     if (item.id === selectedId) {
       tambahan = (
@@ -73,7 +62,7 @@ export default function home() {
           <CheckBox
             disabled={false}
             value={item.done}
-            onValueChange={() => handleComplete(index)}
+            onValueChange={() => handleCompleteStorage(index)}
           />
         </View>
         {tambahan}
@@ -81,16 +70,33 @@ export default function home() {
     );
   };
 
+  let status;
+  if (dataStorage.item == 0) {
+    status = (
+      <View>
+        <Text style={styles.status}>Your todos empty</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Todos</Text>
       <View>
-        <FlatList
+        {/* <FlatList
           data={data.item}
           keyExtractor={(item) => item.id.toString()}
           extraData={selectedId}
           renderItem={({item, index}) => {
             return <RenderTodo item={item} index={index} />;
+          }}
+        /> */}
+        {status}
+        <FlatList
+          data={dataStorage.item}
+          extraData={selectedId}
+          renderItem={({item, index}) => {
+            return <RenderTodoStorage item={item} index={index} />;
           }}
         />
       </View>
