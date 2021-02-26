@@ -42,8 +42,10 @@ const styles = StyleSheet.create({
   },
   button: {
     position: 'absolute',
-    bottom: hp(20),
     width: '100%',
+    bottom: hp(0),
+    height: hp(70),
+    backgroundColor: '#160E24',
   },
   check: {
     position: 'absolute',
@@ -64,6 +66,11 @@ const styles = StyleSheet.create({
   },
   status: {
     color: '#fff',
+    fontSize: RFPercentage(3),
+  },
+  statusContainer: {
+    alignSelf: 'center',
+    marginTop: hp(230),
   },
 });
 

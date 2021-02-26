@@ -4,9 +4,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {v4 as uuidv4} from 'uuid';
 
 import styles from './modalStyle';
-import {set} from 'react-native-reanimated';
 
-const App = () => {
+export default function App({navigation}) {
   const [modalVisible, setModalVisible] = useState(false);
   const [newTodo, setNewTodo] = useState('');
   const [todoDescription, setTodoDescription] = useState('');
@@ -21,45 +20,27 @@ const App = () => {
     }
   };
 
-  const todoSaved = {
-    item: [],
-  };
-
-  // const pushdata = (newTodo, todoDescription) => {
-  //   const id = uuidv4();
-  //   todoSaved.item.push({
-  //     id: id,
-  //     todo: newTodo,
-  //     description: todoDescription,
-  //     done: false,
-  //   });
-  //   console.log(todoSaved);
-  //   storeData(todoSaved);
-  // };
-
   const pushdata = async (newTodo, todoDescription) => {
-    const temp = await AsyncStorage.getItem('@storage_Key').then((item) =>
+    let temp = await AsyncStorage.getItem('@storage_Key').then((item) =>
       JSON.parse(item),
     );
     const id = uuidv4();
-    console.log('temp', temp);
-    if (temp.item == 0) {
-      todoSaved.item.push({
-        id: id,
-        todo: newTodo,
-        description: todoDescription,
-        done: false,
-      });
-    } else {
-      temp.item.push({
-        id: id,
-        todo: newTodo,
-        description: todoDescription,
-        done: false,
-      });
+    console.log('temp 1', temp);
+    if (temp === null) {
+      temp = {
+        item: [],
+      };
     }
-    console.log(temp);
+    temp.item.push({
+      id: id,
+      todo: newTodo,
+      description: todoDescription,
+      done: false,
+    });
+
+    console.log('temp 2', temp);
     storeData(temp);
+    navigation.navigate('Home');
   };
 
   return (
@@ -104,6 +85,4 @@ const App = () => {
       </TouchableOpacity>
     </View>
   );
-};
-
-export default App;
+}

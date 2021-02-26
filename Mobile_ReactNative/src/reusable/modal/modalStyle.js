@@ -30,7 +30,6 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   button: {
-    marginTop: hp(25),
     borderWidth: 1,
     justifyContent: 'center',
     alignSelf: 'center',

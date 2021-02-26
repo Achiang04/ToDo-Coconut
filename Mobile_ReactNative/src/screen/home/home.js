@@ -1,13 +1,14 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, TouchableOpacity, FlatList} from 'react-native';
+import {View, Text, TouchableOpacity, FlatList, ScrollView} from 'react-native';
 
 import CheckBox from '@react-native-community/checkbox';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import styles from './homeStyle';
 import Modal from '../../reusable/modal/modal';
+import {hp} from '../../reusable/responsive/dimen';
 
-export default function home() {
+export default function home({navigation}) {
   const [selectedId, setSelectedId] = useState(null);
   const [dataStorage, setDataStorage] = useState([]);
 
@@ -15,6 +16,7 @@ export default function home() {
     try {
       const jsonValue = await AsyncStorage.getItem('@storage_Key');
       setDataStorage(JSON.parse(jsonValue));
+      return JSON.parse(jsonValue);
     } catch (e) {
       console.log(e);
     }
@@ -22,10 +24,19 @@ export default function home() {
 
   useEffect(() => {
     getData();
-  }, []);
 
-  console.log('dataStorage', dataStorage);
-  console.log(selectedId);
+    const unsubscribe = navigation.addListener(() => {
+      getData();
+    });
+
+    return () => {
+      unsubscribe;
+    };
+  }, [navigation]);
+
+  // console.log('dataStorage', dataStorage);
+  // console.log('item', dataStorage.item);
+  // console.log(selectedId);
 
   const handleCompleteStorage = (index) => {
     let {item} = {...dataStorage};
@@ -71,35 +82,30 @@ export default function home() {
   };
 
   let status;
-  if (dataStorage.item == 0) {
+  if (dataStorage === null) {
     status = (
-      <View>
+      <View style={styles.statusContainer}>
         <Text style={styles.status}>Your todos empty</Text>
       </View>
+    );
+  } else {
+    status = (
+      <FlatList
+        contentContainerStyle={{marginBottom: hp(80)}}
+        showsVerticalScrollIndicator={false}
+        data={dataStorage.item}
+        extraData={selectedId}
+        renderItem={({item, index}) => {
+          return <RenderTodoStorage item={item} index={index} />;
+        }}
+      />
     );
   }
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Todos</Text>
-      <View>
-        {/* <FlatList
-          data={data.item}
-          keyExtractor={(item) => item.id.toString()}
-          extraData={selectedId}
-          renderItem={({item, index}) => {
-            return <RenderTodo item={item} index={index} />;
-          }}
-        /> */}
-        {status}
-        <FlatList
-          data={dataStorage.item}
-          extraData={selectedId}
-          renderItem={({item, index}) => {
-            return <RenderTodoStorage item={item} index={index} />;
-          }}
-        />
-      </View>
+      <ScrollView>{status}</ScrollView>
       <View style={styles.button}>
         <Modal />
       </View>
