@@ -3,6 +3,7 @@ import {View, Text, TouchableOpacity, FlatList, ScrollView} from 'react-native';
 
 import CheckBox from '@react-native-community/checkbox';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {SwipeListView} from 'react-native-swipe-list-view';
 
 import styles from './homeStyle';
 import Modal from '../../reusable/modal/modal';
@@ -45,6 +46,30 @@ export default function home({navigation}) {
   };
 
   const RenderTodoStorage = ({item, index}) => {
+    console.log(item.dueTime);
+    let time;
+    if (item.dueTime === undefined) {
+      time = <Text>Date : -</Text>;
+    } else {
+      time = <Text>Date : {item.dueTime}</Text>;
+    }
+
+    let category;
+    if (item.category === undefined) {
+      category = null;
+    } else {
+      category = (
+        <View style={styles.categoryContainer}>
+          <Text
+            style={
+              item.done ? styles.categoryTextSelected : styles.categoryText
+            }>
+            {item.category}
+          </Text>
+        </View>
+      );
+    }
+
     let tambahan;
     if (item.id === selectedId) {
       tambahan = (
@@ -55,7 +80,9 @@ export default function home({navigation}) {
                 ? styles.todoTextTambahanSelected
                 : styles.todoTextTambahan
             }>
-            Description: {'\n'}
+            {time} {'\n'}
+            {'\n'}
+            Description : {'\n'}
             {item.description}
           </Text>
         </View>
@@ -66,6 +93,7 @@ export default function home({navigation}) {
       <TouchableOpacity
         style={item.done ? styles.todoContainerSelected : styles.todoContainer}
         onPress={() => setSelectedId(item.id)}>
+        {category}
         <Text style={item.done ? styles.todoTextSelected : styles.todoText}>
           {item.todo}
         </Text>
@@ -73,6 +101,7 @@ export default function home({navigation}) {
           <CheckBox
             disabled={false}
             value={item.done}
+            tintColors={{true: '#6D26FB', false: 'black'}}
             onValueChange={() => handleCompleteStorage(index)}
           />
         </View>

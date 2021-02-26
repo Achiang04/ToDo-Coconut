@@ -72,6 +72,24 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: hp(230),
   },
+  categoryContainer: {
+    borderWidth: 1,
+    backgroundColor: '#6D26FB',
+    borderColor: '#6D26FB',
+    borderRadius: 5,
+    padding: wp(2),
+    alignSelf: 'flex-start',
+    marginBottom: hp(5),
+  },
+  categoryText: {
+    color: '#fff',
+    fontSize: RFPercentage(2),
+  },
+  categoryTextSelected: {
+    color: '#fff',
+    fontSize: RFPercentage(2),
+    textDecorationLine: 'line-through',
+  },
 });
 
 export default styles;

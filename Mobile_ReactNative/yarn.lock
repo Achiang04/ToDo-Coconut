@@ -1164,6 +1164,13 @@
     sudo-prompt "^9.0.0"
     wcwidth "^1.0.1"
 
+"@react-native-community/datetimepicker@^3.0.9":
+  version "3.0.9"
+  resolved "https://registry.yarnpkg.com/@react-native-community/datetimepicker/-/datetimepicker-3.0.9.tgz#14e96c0a9049d76165f77ded95251e50c596b910"
+  integrity sha512-8Hel5K2xQNJsGQleUT5fheO60aO0/KhP9nkbDzfGgv3Cdckrf2xWQs0JK3xUhuDoUztpMZS45jqE2WPS7fBdgA==
+  dependencies:
+    invariant "^2.2.4"
+
 "@react-native-community/eslint-config@^2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@react-native-community/eslint-config/-/eslint-config-2.0.0.tgz#35dcc529a274803fc4e0a6b3d6c274551fb91774"
@@ -5176,6 +5183,11 @@ mkdirp@^0.5.1:
   dependencies:
     minimist "^1.2.5"
 
+moment@^2.22.0:
+  version "2.29.1"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
+  integrity sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==
+
 ms@2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
@@ -5834,6 +5846,20 @@ react-is@^17.0.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.1.tgz#5b3531bd76a645a4c9fb6e693ed36419e3301339"
   integrity sha512-NAnt2iGDXohE5LI7uBnLnqvLQMtzhkiAOLXTmv+qnF9Ky7xAPcX8Up/xWIhxvLVGJvuLiNc4xQLtuqDRzb4fSA==
 
+react-native-datepicker@^1.7.2:
+  version "1.7.2"
+  resolved "https://registry.yarnpkg.com/react-native-datepicker/-/react-native-datepicker-1.7.2.tgz#58d0822591a0ac9b32aba082650222a0ee29669d"
+  integrity sha1-WNCCJZGgrJsyq6CCZQIioO4pZp0=
+  dependencies:
+    moment "^2.22.0"
+
+react-native-dropdown-picker@^4.0.2:
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/react-native-dropdown-picker/-/react-native-dropdown-picker-4.0.2.tgz#03cc48d6f817ff1348323c99f35afbc69640e1e7"
+  integrity sha512-x6OZ5YNzFc5PEwWFDYQBBxYq6qvCnc8NPX9d9UsXpaLizTSXLT0kWLsUzsJOMm6SVsUxWY7FOAyXsB4JUSyKdQ==
+  dependencies:
+    react-native-vector-icons "^7.0.0"
+
 react-native-gesture-handler@^1.10.0:
   version "1.10.2"
   resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-1.10.2.tgz#3e42329797e8d22bdb2a4d7bf84a41da7e19498b"
@@ -5878,6 +5904,25 @@ react-native-screens@^2.17.1:
   version "2.17.1"
   resolved "https://registry.yarnpkg.com/react-native-screens/-/react-native-screens-2.17.1.tgz#c3c0ac750af48741c5b1635511e6af2a27b74309"
   integrity sha512-B4gD5e4csvlVwlhf+RNqjQZ9mHTwe/iL3rXondgZxnKz4oW0QAmtLnLRKOrYVxoaJaF9Fy7jhjo//24/472APQ==
+
+react-native-swipe-list-view@^3.2.6:
+  version "3.2.6"
+  resolved "https://registry.yarnpkg.com/react-native-swipe-list-view/-/react-native-swipe-list-view-3.2.6.tgz#dde8f65dcdc24f50fafc05da9e90b139b1c3b185"
+  integrity sha512-FIrLzYjdxpMmD1hinP6bLSVS2eR2bhFdFuaqOJ+6/EuWDqZMBQcL4FLbkIwulMOc39JGdGZAxGExJYs7VKiQeQ==
+
+react-native-vector-icons@^7.0.0:
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-vector-icons/-/react-native-vector-icons-7.1.0.tgz#145487d617b2a81d395d2cf64e6e065fcab3a454"
+  integrity sha512-V2a1zJ4i+kS8O4j183gIwX14St9AxxXabxwYpFBgRhvr2NDXyFcjHDEAgrOYYlt2W57e20aN1tBDU/I+wn9WtQ==
+  dependencies:
+    lodash.frompairs "^4.0.1"
+    lodash.isequal "^4.5.0"
+    lodash.isstring "^4.0.1"
+    lodash.omit "^4.5.0"
+    lodash.pick "^4.4.0"
+    lodash.template "^4.5.0"
+    prop-types "^15.7.2"
+    yargs "^15.0.2"
 
 react-native-vector-icons@^8.0.0:
   version "8.1.0"
@@ -7414,7 +7459,7 @@ yargs@^14.2.0:
     y18n "^4.0.0"
     yargs-parser "^15.0.1"
 
-yargs@^15.1.0, yargs@^15.4.1:
+yargs@^15.0.2, yargs@^15.1.0, yargs@^15.4.1:
   version "15.4.1"
   resolved "https://registry.yarnpkg.com/yargs/-/yargs-15.4.1.tgz#0d87a16de01aee9d8bec2bfbf74f67851730f4f8"
   integrity sha512-aePbxDmcYW++PaqBsJ+HYUFwCdv4LVvdnhBy78E57PIor8/OVvhMrADFFEDh8DHDFRv/O9i3lPhsENjO7QX0+A==
