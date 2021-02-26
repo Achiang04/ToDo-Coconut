@@ -45,6 +45,23 @@ const styles = StyleSheet.create({
     bottom: hp(20),
     width: '100%',
   },
+  check: {
+    position: 'absolute',
+    right: wp(10),
+    top: hp(13),
+  },
+  tambahan: {
+    marginTop: hp(5),
+  },
+  todoTextTambahan: {
+    color: '#ADA4BD',
+    fontSize: RFPercentage(2.2),
+  },
+  todoTextTambahanSelected: {
+    color: '#ADA4BD',
+    fontSize: RFPercentage(2.2),
+    textDecorationLine: 'line-through',
+  },
 });
 
 export default styles;

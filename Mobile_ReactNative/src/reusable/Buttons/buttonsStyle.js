@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {wp, hp} from '../../reusable/responsive/dimen';
+import {wp, hp} from '../responsive/dimen';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 
 const styles = StyleSheet.create({
