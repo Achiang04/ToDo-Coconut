@@ -3,9 +3,9 @@ import {View, Text, TouchableOpacity, FlatList, ScrollView} from 'react-native';
 
 import CheckBox from '@react-native-community/checkbox';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {SwipeListView} from 'react-native-swipe-list-view';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import DeleteModal from '../../reusable/modal/deleteModal';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 
 import styles from './homeStyle';
@@ -38,26 +38,11 @@ export default function home({navigation}) {
     };
   }, [navigation]);
 
-  // console.log('dataStorage', dataStorage);
-  // console.log('item', dataStorage.item);
-  // console.log(selectedId);
-
   const handleCompleteStorage = (index) => {
     let {item} = {...dataStorage};
     item[index]['done'] = !item[index]['done'];
     setDataStorage({item});
   };
-
-  // const handleDeleteStorage = async (index) => {
-  //   let {item} = {...dataStorage};
-  //   console.log(item);
-  //   console.log('nomor', index);
-  //   // item.splice(index, 1);
-  //   // const jsonValue = JSON.stringify(item);
-  //   // await AsyncStorage.setItem('@storage_Key', jsonValue);
-  //   getData();
-  //   console.log(`success delete index ${index}`);
-  // };
 
   const handleDeleteStorage = async (index) => {
     let {item} = {item: {...dataStorage}};
@@ -70,10 +55,7 @@ export default function home({navigation}) {
     console.log(`success delete index ${index}`);
   };
 
-  console.log(dataStorage);
-
   const RenderTodoStorage = ({item, index}) => {
-    // console.log(item.dueTime);
     let time;
     if (item.dueTime === undefined || item.dueTime === '') {
       time = <Text>Date: -</Text>;
@@ -129,15 +111,20 @@ export default function home({navigation}) {
 
     let deleteIcon;
     if (item.id === selectedId) {
+      // deleteIcon = (
+      //   <View style={styles.delete}>
+      //     <TouchableOpacity onPress={() => handleDeleteStorage(index)}>
+      //       <Ionicons
+      //         name={'trash-outline'}
+      //         size={RFPercentage(3)}
+      //         color={item.done ? '#6D26FB' : '#fff'}
+      //       />
+      //     </TouchableOpacity>
+      //   </View>
+      // );
       deleteIcon = (
-        <View style={styles.delete}>
-          <TouchableOpacity onPress={() => handleDeleteStorage(index)}>
-            <Ionicons
-              name={'trash-outline'}
-              size={RFPercentage(3)}
-              color={item.done ? '#6D26FB' : '#fff'}
-            />
-          </TouchableOpacity>
+        <View>
+          <DeleteModal index={index} />
         </View>
       );
     }
@@ -159,6 +146,7 @@ export default function home({navigation}) {
             />
           </TouchableOpacity>
         </View>
+        {deleteIcon}
         <View style={styles.check}>
           <CheckBox
             disabled={false}
@@ -168,7 +156,6 @@ export default function home({navigation}) {
           />
         </View>
         {tambahan}
-        {deleteIcon}
       </TouchableOpacity>
     );
   };
