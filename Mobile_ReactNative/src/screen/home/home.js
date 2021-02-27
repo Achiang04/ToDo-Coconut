@@ -7,53 +7,29 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import DeleteModal from '../../reusable/modal/deleteModal';
 import {RFPercentage} from 'react-native-responsive-fontsize';
+import {useDispatch, useSelector} from 'react-redux';
 
 import styles from './homeStyle';
 import {hp} from '../../reusable/responsive/dimen';
 import Buttons from '../../reusable/Buttons/Buttons';
+import {todoAction} from '../../redux/Actions/todoAction';
 
 export default function home({navigation}) {
-  const [selectedId, setSelectedId] = useState(null);
-  const [dataStorage, setDataStorage] = useState([]);
+  const dispatch = useDispatch();
 
-  const getData = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem('@storage_Key');
-      setDataStorage(JSON.parse(jsonValue));
-      return JSON.parse(jsonValue);
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  const [selectedId, setSelectedId] = useState(null);
+  const data = useSelector((state) => state.todoReducer.data);
+  console.log('data hasil redux di home', data);
 
   useEffect(() => {
-    getData();
+    dispatch(todoAction());
+  }, []);
 
-    const unsubscribe = navigation.addListener(() => {
-      getData();
-    });
-
-    return () => {
-      unsubscribe;
-    };
-  }, [navigation]);
-
-  const handleCompleteStorage = (index) => {
-    let {item} = {...dataStorage};
-    item[index]['done'] = !item[index]['done'];
-    setDataStorage({item});
-  };
-
-  const handleDeleteStorage = async (index) => {
-    let {item} = {item: {...dataStorage}};
-    console.log('data delete', item);
-    console.log('nomor', index);
-    item.item.splice(index, 1);
-    const jsonValue = JSON.stringify(item);
-    await AsyncStorage.setItem('@storage_Key', jsonValue);
-    getData();
-    console.log(`success delete index ${index}`);
-  };
+  // const handleCompleteStorage = (index) => {
+  //   let {item} = {...data};
+  //   item[index]['done'] = !item[index]['done'];
+  //   setDataStorage({item});
+  // };
 
   const RenderTodoStorage = ({item, index}) => {
     let time;
@@ -111,17 +87,6 @@ export default function home({navigation}) {
 
     let deleteIcon;
     if (item.id === selectedId) {
-      // deleteIcon = (
-      //   <View style={styles.delete}>
-      //     <TouchableOpacity onPress={() => handleDeleteStorage(index)}>
-      //       <Ionicons
-      //         name={'trash-outline'}
-      //         size={RFPercentage(3)}
-      //         color={item.done ? '#6D26FB' : '#fff'}
-      //       />
-      //     </TouchableOpacity>
-      //   </View>
-      // );
       deleteIcon = (
         <View>
           <DeleteModal index={index} />
@@ -161,7 +126,7 @@ export default function home({navigation}) {
   };
 
   let status;
-  if (dataStorage === null) {
+  if (data === null) {
     status = (
       <View style={styles.statusContainer}>
         <Text style={styles.status}>Your todos empty</Text>
@@ -172,7 +137,7 @@ export default function home({navigation}) {
       <FlatList
         contentContainerStyle={{marginBottom: hp(80)}}
         showsVerticalScrollIndicator={false}
-        data={dataStorage.item}
+        data={data.item}
         extraData={selectedId}
         renderItem={({item, index}) => {
           return <RenderTodoStorage item={item} index={index} />;
