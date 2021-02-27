@@ -7,6 +7,7 @@ import store from './src/redux/Store/store';
 import {LogBox} from 'react-native';
 LogBox.ignoreAllLogs(true);
 console.disableYellowBox = ['Unable to symbolicate'];
+console.disableYellowBox = true;
 
 export default function App() {
   return (

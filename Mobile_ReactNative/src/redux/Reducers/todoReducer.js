@@ -22,12 +22,6 @@ function todoReducer(state = initialState, action) {
         loading: false,
         error: action.error,
       });
-    // case types.GET_UPDATE:
-    //   return Object.assign({}, state, {
-    //     loading: false,
-    //     error: action.error,
-    //     data: action.data.item
-    //   });
     default:
       return state;
   }

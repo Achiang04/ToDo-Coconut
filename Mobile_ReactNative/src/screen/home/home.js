@@ -25,11 +25,15 @@ export default function home({navigation}) {
     dispatch(todoAction());
   }, []);
 
-  // const handleCompleteStorage = (index) => {
-  //   let {item} = {...data};
-  //   item[index]['done'] = !item[index]['done'];
-  //   setDataStorage({item});
-  // };
+  const handleCompleteStorage = async (index) => {
+    let item = await AsyncStorage.getItem('@storage_Key').then((item) =>
+      JSON.parse(item),
+    );
+    item.item[index]['done'] = !item.item[index]['done'];
+    const jsonValue = JSON.stringify(item);
+    await AsyncStorage.setItem('@storage_Key', jsonValue);
+    dispatch(todoAction());
+  };
 
   const RenderTodoStorage = ({item, index}) => {
     let time;
@@ -89,7 +93,7 @@ export default function home({navigation}) {
     if (item.id === selectedId) {
       deleteIcon = (
         <View>
-          <DeleteModal index={index} />
+          <DeleteModal index={index} done={item.done} />
         </View>
       );
     }
