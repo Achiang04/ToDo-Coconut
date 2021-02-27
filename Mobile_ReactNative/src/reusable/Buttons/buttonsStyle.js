@@ -4,7 +4,6 @@ import {RFPercentage} from 'react-native-responsive-fontsize';
 
 const styles = StyleSheet.create({
   button: {
-    marginTop: hp(25),
     borderWidth: 1,
     justifyContent: 'center',
     alignSelf: 'center',

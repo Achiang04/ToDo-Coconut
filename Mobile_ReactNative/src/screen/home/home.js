@@ -4,10 +4,12 @@ import {View, Text, TouchableOpacity, FlatList, ScrollView} from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {SwipeListView} from 'react-native-swipe-list-view';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import {RFPercentage} from 'react-native-responsive-fontsize';
 
 import styles from './homeStyle';
-import Modal from '../../reusable/modal/modal';
 import {hp} from '../../reusable/responsive/dimen';
+import Buttons from '../../reusable/Buttons/Buttons';
 
 export default function home({navigation}) {
   const [selectedId, setSelectedId] = useState(null);
@@ -45,17 +47,31 @@ export default function home({navigation}) {
     setDataStorage({item});
   };
 
+  console.log(dataStorage);
+
   const RenderTodoStorage = ({item, index}) => {
-    console.log(item.dueTime);
+    // console.log(item.dueTime);
     let time;
-    if (item.dueTime === undefined) {
-      time = <Text>Date : -</Text>;
+    if (item.dueTime === undefined || item.dueTime === '') {
+      time = <Text>Date: -</Text>;
     } else {
-      time = <Text>Date : {item.dueTime}</Text>;
+      time = <Text>Date: {item.dueTime}</Text>;
+    }
+
+    let desc;
+    if (item.description === undefined || item.description === '') {
+      desc = <Text>Description: -</Text>;
+    } else {
+      desc = (
+        <Text>
+          Description: {'\n'}
+          {item.description}
+        </Text>
+      );
     }
 
     let category;
-    if (item.category === undefined) {
+    if (item.category === undefined || item.category === '') {
       category = null;
     } else {
       category = (
@@ -82,8 +98,7 @@ export default function home({navigation}) {
             }>
             {time} {'\n'}
             {'\n'}
-            Description : {'\n'}
-            {item.description}
+            {desc}
           </Text>
         </View>
       );
@@ -97,11 +112,20 @@ export default function home({navigation}) {
         <Text style={item.done ? styles.todoTextSelected : styles.todoText}>
           {item.todo}
         </Text>
+        <View style={styles.edit}>
+          <TouchableOpacity>
+            <FontAwesome5
+              name={'edit'}
+              size={RFPercentage(2.8)}
+              color={item.done ? '#6D26FB' : '#fff'}
+            />
+          </TouchableOpacity>
+        </View>
         <View style={styles.check}>
           <CheckBox
             disabled={false}
             value={item.done}
-            tintColors={{true: '#6D26FB', false: 'black'}}
+            tintColors={{true: '#6D26FB', false: '#fff'}}
             onValueChange={() => handleCompleteStorage(index)}
           />
         </View>
@@ -136,7 +160,10 @@ export default function home({navigation}) {
       <Text style={styles.title}>Todos</Text>
       <ScrollView>{status}</ScrollView>
       <View style={styles.button}>
-        <Modal />
+        <Buttons
+          text={'New Todo'}
+          press={() => navigation.navigate('AddTodo')}
+        />
       </View>
     </View>
   );

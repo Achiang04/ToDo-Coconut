@@ -46,11 +46,17 @@ const styles = StyleSheet.create({
     bottom: hp(0),
     height: hp(70),
     backgroundColor: '#160E24',
+    justifyContent: 'center',
   },
   check: {
     position: 'absolute',
     right: wp(10),
     top: hp(13),
+  },
+  edit: {
+    position: 'absolute',
+    right: wp(40),
+    top: hp(18),
   },
   tambahan: {
     marginTop: hp(5),
