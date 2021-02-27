@@ -54,12 +54,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: RFPercentage(2.2),
   },
-  delete: {
-    position: 'absolute',
-    top: hp(10),
-    right: wp(-2),
-    zIndex: 1,
-  },
   row: {
     flexDirection: 'row',
     justifyContent: 'center',

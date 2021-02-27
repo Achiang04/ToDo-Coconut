@@ -11,12 +11,15 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {useDispatch} from 'react-redux';
+import {todoAction} from '../../redux/Actions/todoAction';
 
 import styles from './deleteModalStyle.js';
 
 const DeleteModal = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
   const index = props.index;
+  const dispatch = useDispatch();
 
   console.log(index);
 
@@ -29,7 +32,7 @@ const DeleteModal = (props) => {
     item.item.splice(index, 1);
     const jsonValue = JSON.stringify(item);
     await AsyncStorage.setItem('@storage_Key', jsonValue);
-    // getData();
+    dispatch(todoAction());
     console.log(`success delete index ${index}`);
   };
 
@@ -66,9 +69,7 @@ const DeleteModal = (props) => {
           </View>
         </View>
       </Modal>
-      <TouchableOpacity
-        style={styles.delete}
-        onPress={() => setModalVisible(!modalVisible)}>
+      <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
         <Ionicons
           name={'trash-outline'}
           size={RFPercentage(3)}

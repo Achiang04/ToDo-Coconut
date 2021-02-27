@@ -86,6 +86,7 @@ export default function addTodo({navigation}) {
         </View>
       );
     }
+
     return (
       <View>
         <View style={[styles.pilihJenjang]}>
@@ -177,7 +178,6 @@ export default function addTodo({navigation}) {
             tintColors={{true: '#6D26FB', false: '#fff'}}
             onValueChange={() => setCheckDate(!checkDate)}
           />
-
           <TouchableOpacity onPress={() => setCheckDate(!checkDate)}>
             <Text style={styles.useDate}>Do you want to use Date ?</Text>
           </TouchableOpacity>
