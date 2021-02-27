@@ -5,6 +5,7 @@ import CheckBox from '@react-native-community/checkbox';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {SwipeListView} from 'react-native-swipe-list-view';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 
 import styles from './homeStyle';
@@ -45,6 +46,28 @@ export default function home({navigation}) {
     let {item} = {...dataStorage};
     item[index]['done'] = !item[index]['done'];
     setDataStorage({item});
+  };
+
+  // const handleDeleteStorage = async (index) => {
+  //   let {item} = {...dataStorage};
+  //   console.log(item);
+  //   console.log('nomor', index);
+  //   // item.splice(index, 1);
+  //   // const jsonValue = JSON.stringify(item);
+  //   // await AsyncStorage.setItem('@storage_Key', jsonValue);
+  //   getData();
+  //   console.log(`success delete index ${index}`);
+  // };
+
+  const handleDeleteStorage = async (index) => {
+    let {item} = {item: {...dataStorage}};
+    console.log('data delete', item);
+    console.log('nomor', index);
+    item.item.splice(index, 1);
+    const jsonValue = JSON.stringify(item);
+    await AsyncStorage.setItem('@storage_Key', jsonValue);
+    getData();
+    console.log(`success delete index ${index}`);
   };
 
   console.log(dataStorage);
@@ -104,6 +127,21 @@ export default function home({navigation}) {
       );
     }
 
+    let deleteIcon;
+    if (item.id === selectedId) {
+      deleteIcon = (
+        <View style={styles.delete}>
+          <TouchableOpacity onPress={() => handleDeleteStorage(index)}>
+            <Ionicons
+              name={'trash-outline'}
+              size={RFPercentage(3)}
+              color={item.done ? '#6D26FB' : '#fff'}
+            />
+          </TouchableOpacity>
+        </View>
+      );
+    }
+
     return (
       <TouchableOpacity
         style={item.done ? styles.todoContainerSelected : styles.todoContainer}
@@ -130,6 +168,7 @@ export default function home({navigation}) {
           />
         </View>
         {tambahan}
+        {deleteIcon}
       </TouchableOpacity>
     );
   };

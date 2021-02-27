@@ -96,6 +96,11 @@ const styles = StyleSheet.create({
     fontSize: RFPercentage(2),
     textDecorationLine: 'line-through',
   },
+  delete: {
+    position: 'absolute',
+    top: hp(50),
+    right: wp(14),
+  },
 });
 
 export default styles;
