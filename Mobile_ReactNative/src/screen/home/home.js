@@ -92,7 +92,7 @@ export default function home({navigation}) {
     let deleteIcon;
     if (item.id === selectedId) {
       deleteIcon = (
-        <View>
+        <View style={styles.delete}>
           <DeleteModal index={index} done={item.done} />
         </View>
       );
@@ -106,16 +106,24 @@ export default function home({navigation}) {
         <Text style={item.done ? styles.todoTextSelected : styles.todoText}>
           {item.todo}
         </Text>
-        <View style={styles.edit}>
-          <TouchableOpacity>
-            <FontAwesome5
-              name={'edit'}
-              size={RFPercentage(2.8)}
-              color={item.done ? '#6D26FB' : '#fff'}
-            />
-          </TouchableOpacity>
-        </View>
-        {deleteIcon}
+        <TouchableOpacity
+          style={styles.edit}
+          onPress={() =>
+            navigation.navigate('editTodo', {
+              index: index,
+              todo: item.todo,
+              desc: item.description,
+              category: item.category,
+              date: item.dueTime,
+              status: item.done,
+            })
+          }>
+          <FontAwesome5
+            name={'edit'}
+            size={RFPercentage(2.4)}
+            color={item.done ? '#6D26FB' : '#fff'}
+          />
+        </TouchableOpacity>
         <View style={styles.check}>
           <CheckBox
             disabled={false}
@@ -125,6 +133,7 @@ export default function home({navigation}) {
           />
         </View>
         {tambahan}
+        {deleteIcon}
       </TouchableOpacity>
     );
   };

@@ -69,9 +69,7 @@ const DeleteModal = (props) => {
           </View>
         </View>
       </Modal>
-      <TouchableOpacity
-        style={styles.delete}
-        onPress={() => setModalVisible(!modalVisible)}>
+      <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
         <Ionicons
           name={'trash-outline'}
           size={RFPercentage(3)}

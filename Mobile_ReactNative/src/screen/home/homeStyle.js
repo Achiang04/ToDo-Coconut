@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
   edit: {
     position: 'absolute',
     right: wp(40),
-    top: hp(18),
+    top: hp(17),
   },
   tambahan: {
     marginTop: hp(5),
