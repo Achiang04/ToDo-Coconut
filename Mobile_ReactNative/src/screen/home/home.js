@@ -45,7 +45,25 @@ export default function home({navigation}) {
     dispatch(todoAction());
   };
 
+  const checkDueDate = async (index, date) => {
+    let item = await AsyncStorage.getItem('@storage_Key').then((item) =>
+      JSON.parse(item),
+    );
+    const limit = moment(date);
+    const now = moment().format('YYYY-MM-DD');
+    // console.log('now', now);
+    // console.log('limit', limit);
+
+    if (limit.isValid() && moment(now).isAfter(limit)) {
+      item.item[index]['lewat'] = true;
+      const jsonValue = JSON.stringify(item);
+      await AsyncStorage.setItem('@storage_Key', jsonValue);
+    }
+  };
+
   const RenderTodoStorage = ({item, index}) => {
+    checkDueDate(index, item.dueTime);
+
     let time;
     if (item.dueTime === undefined || item.dueTime === '') {
       time = <Text>Date: -</Text>;

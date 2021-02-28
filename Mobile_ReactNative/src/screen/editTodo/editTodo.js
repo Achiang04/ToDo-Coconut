@@ -15,6 +15,7 @@ import CheckBox from '@react-native-community/checkbox';
 import DatePicker from 'react-native-datepicker';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {useDispatch} from 'react-redux';
+import moment from 'moment';
 
 import Buttons from '../../reusable/Buttons/Buttons';
 import styles from './editTodoStyle';
@@ -122,6 +123,7 @@ export default function editTodo(props) {
   };
 
   const pilihTanggal = () => {
+    const now = moment().format('YYYY-MM-DD');
     if (checkDate) {
       return (
         <DatePicker
@@ -133,9 +135,9 @@ export default function editTodo(props) {
               ? 'Select Date'
               : props.route.params.date
           }
-          format="DD-MM-YYYY"
-          minDate="01-01-2015"
-          maxDate="01-01-2030"
+          format="YYYY-MM-DD"
+          minDate={now}
+          maxDate="2030-01-01"
           confirmBtnText="Confirm"
           cancelBtnText="Cancel"
           customStyles={{
