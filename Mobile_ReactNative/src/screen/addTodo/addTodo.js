@@ -32,7 +32,7 @@ export default function addTodo({navigation}) {
     try {
       const jsonValue = JSON.stringify(value);
       await AsyncStorage.setItem('@storage_Key', jsonValue);
-      console.log('success add');
+      // console.log('success add');
     } catch (e) {
       console.log(e);
     }
@@ -64,6 +64,7 @@ export default function addTodo({navigation}) {
       description: todoDescription,
       category: kategori,
       dueTime: dueDate,
+      lewat: false,
       done: false,
     });
 

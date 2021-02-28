@@ -20,7 +20,7 @@ export const todoAction = () => {
     try {
       dispatch(getRequest());
       const jsonValue = await AsyncStorage.getItem('@storage_Key');
-      console.log('data di redux', JSON.parse(jsonValue));
+      // console.log('data di redux', JSON.parse(jsonValue));
       dispatch(getSuccess(JSON.parse(jsonValue)));
     } catch (e) {
       dispatch(getFailed(e));

@@ -14,12 +14,15 @@ import {RFPercentage} from 'react-native-responsive-fontsize';
 import CheckBox from '@react-native-community/checkbox';
 import DatePicker from 'react-native-datepicker';
 import DropDownPicker from 'react-native-dropdown-picker';
+import {useDispatch} from 'react-redux';
 
 import Buttons from '../../reusable/Buttons/Buttons';
 import styles from './editTodoStyle';
 import {wp, hp} from '../../reusable/responsive/dimen';
 
 export default function editTodo(props) {
+  const dispatch = useDispatch();
+
   const [checkDate, setCheckDate] = useState(false);
   const [category, setCategory] = useState('');
   const [date, setDate] = useState('');
@@ -30,7 +33,7 @@ export default function editTodo(props) {
 
   if (!props.route.params.date === '') {
     setCheckDate(true);
-    console.log('checkDate', checkDate);
+    // console.log('checkDate', checkDate);
   }
 
   const editTodo = async (index, newTodo, desc, kategori, dueDate) => {

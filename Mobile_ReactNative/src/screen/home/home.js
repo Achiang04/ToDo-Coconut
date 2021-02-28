@@ -8,6 +8,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import DeleteModal from '../../reusable/modal/deleteModal';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import {useDispatch, useSelector} from 'react-redux';
+import moment from 'moment';
 
 import styles from './homeStyle';
 import {hp} from '../../reusable/responsive/dimen';
@@ -19,11 +20,20 @@ export default function home({navigation}) {
 
   const [selectedId, setSelectedId] = useState(null);
   const data = useSelector((state) => state.todoReducer.data);
-  console.log('data hasil redux di home', data);
 
   useEffect(() => {
     dispatch(todoAction());
-  }, []);
+
+    const unsubscribe = navigation.addListener(() => {
+      dispatch(todoAction());
+    });
+
+    return () => {
+      unsubscribe;
+    };
+  }, [navigation]);
+
+  console.log('Data', data);
 
   const handleCompleteStorage = async (index) => {
     let item = await AsyncStorage.getItem('@storage_Key').then((item) =>
@@ -52,6 +62,20 @@ export default function home({navigation}) {
           Description: {'\n'}
           {item.description}
         </Text>
+      );
+    }
+
+    let lewat;
+    if (item.lewat) {
+      lewat = (
+        <View style={styles.lewatContainer}>
+          <Text
+            style={
+              item.lewat ? styles.categoryTextSelected : styles.categoryText
+            }>
+            Missed
+          </Text>
+        </View>
       );
     }
 
@@ -102,7 +126,10 @@ export default function home({navigation}) {
       <TouchableOpacity
         style={item.done ? styles.todoContainerSelected : styles.todoContainer}
         onPress={() => setSelectedId(item.id)}>
-        {category}
+        <View style={styles.row}>
+          {lewat}
+          {category}
+        </View>
         <Text style={item.done ? styles.todoTextSelected : styles.todoText}>
           {item.todo}
         </Text>

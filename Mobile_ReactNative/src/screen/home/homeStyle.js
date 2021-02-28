@@ -101,6 +101,19 @@ const styles = StyleSheet.create({
     top: hp(50),
     right: wp(14),
   },
+  row: {
+    flexDirection: 'row',
+  },
+  lewatContainer: {
+    borderWidth: 1,
+    backgroundColor: 'red',
+    borderColor: 'red',
+    borderRadius: 5,
+    padding: wp(2),
+    alignSelf: 'flex-start',
+    marginBottom: hp(5),
+    marginRight: wp(5),
+  },
 });
 
 export default styles;
