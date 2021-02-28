@@ -33,7 +33,7 @@ export default function home({navigation}) {
     };
   }, [navigation]);
 
-  console.log('Data', data);
+  // console.log('Data', data);
 
   const handleCompleteStorage = async (index) => {
     let item = await AsyncStorage.getItem('@storage_Key').then((item) =>
@@ -64,11 +64,16 @@ export default function home({navigation}) {
   const RenderTodoStorage = ({item, index}) => {
     checkDueDate(index, item.dueTime);
 
+    let d = item.dueTime.slice(8, 10);
+    let m = item.dueTime.slice(5, 7);
+    let y = item.dueTime.slice(0, 4);
+    let dateFormat = ` ${d} - ${m} - ${y}`;
+
     let time;
     if (item.dueTime === undefined || item.dueTime === '') {
       time = <Text>Date: -</Text>;
     } else {
-      time = <Text>Date: {item.dueTime}</Text>;
+      time = <Text>Date: {dateFormat}</Text>;
     }
 
     let desc;
