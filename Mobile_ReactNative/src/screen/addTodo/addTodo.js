@@ -15,6 +15,7 @@ import DatePicker from 'react-native-datepicker';
 import CheckBox from '@react-native-community/checkbox';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {RFPercentage} from 'react-native-responsive-fontsize';
+import moment from 'moment';
 
 import Buttons from '../../reusable/Buttons/Buttons';
 import {wp, hp} from '../../reusable/responsive/dimen';
@@ -28,22 +29,12 @@ export default function addTodo({navigation}) {
   const [date, setDate] = useState('');
   const [checkDate, setCheckDate] = useState(false);
 
-  const storeData = async (value) => {
-    try {
-      const jsonValue = JSON.stringify(value);
-      await AsyncStorage.setItem('@storage_Key', jsonValue);
-      // console.log('success add');
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
   const pushdata = async (newTodo, todoDescription, kategori, dueDate) => {
     let temp = await AsyncStorage.getItem('@storage_Key').then((item) =>
       JSON.parse(item),
     );
     const id = uuidv4();
-    console.log('temp 1', temp);
+    // console.log('temp 1', temp);
 
     if (!checkDate) {
       dueDate = '';
@@ -68,8 +59,9 @@ export default function addTodo({navigation}) {
       done: false,
     });
 
-    console.log('temp 2', temp);
-    storeData(temp);
+    // console.log('temp 2', temp);
+    const jsonValue = JSON.stringify(temp);
+    await AsyncStorage.setItem('@storage_Key', jsonValue);
     navigation.replace('Home');
   };
 
@@ -119,6 +111,7 @@ export default function addTodo({navigation}) {
   };
 
   const pilihTanggal = () => {
+    const now = moment().format('YYYY-MM-DD');
     if (checkDate) {
       return (
         <DatePicker
@@ -126,9 +119,9 @@ export default function addTodo({navigation}) {
           date={date}
           mode="date"
           placeholder="Select Date"
-          format="DD-MM-YYYY"
-          minDate="01-01-2015"
-          maxDate="01-01-2030"
+          format="YYYY-MM-DD"
+          minDate={now}
+          maxDate="2030-01-01"
           confirmBtnText="Confirm"
           cancelBtnText="Cancel"
           customStyles={{
