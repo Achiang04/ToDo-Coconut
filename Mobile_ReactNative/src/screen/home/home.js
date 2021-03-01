@@ -33,7 +33,17 @@ export default function home({navigation}) {
     };
   }, [navigation]);
 
-  console.log('Data', data);
+  // console.log('Data', data);
+
+  const handleCompleteStorage = async (index) => {
+    let item = await AsyncStorage.getItem('@storage_Key').then((item) =>
+      JSON.parse(item),
+    );
+    item.item[index]['done'] = !item.item[index]['done'];
+    const jsonValue = JSON.stringify(item);
+    await AsyncStorage.setItem('@storage_Key', jsonValue);
+    dispatch(todoAction());
+  };
 
   const RenderTodoStorage = ({item, index}) => {
     let d = item.dueTime.slice(8, 10);
@@ -46,7 +56,6 @@ export default function home({navigation}) {
       time = <Text>Date: -</Text>;
     } else {
       time = <Text>Date: {dateFormat}</Text>;
-      // time = <Text>Date: {item.dueTime}</Text>;
     }
 
     let desc;
@@ -61,7 +70,6 @@ export default function home({navigation}) {
       );
     }
 
-    console.log(index + 'dalam render ', item.lewat);
     let lewat;
     if (item.lewat) {
       lewat = (
