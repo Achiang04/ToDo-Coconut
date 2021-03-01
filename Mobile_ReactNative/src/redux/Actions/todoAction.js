@@ -16,18 +16,6 @@ export const getFailed = (error) => ({
   error,
 });
 
-// export const todoAction = () => {
-//   return async (dispatch) => {
-//     try {
-//       dispatch(getRequest());
-//       const jsonValue = await AsyncStorage.getItem('@storage_Key');
-//       dispatch(getSuccess(JSON.parse(jsonValue)));
-//     } catch (e) {
-//       dispatch(getFailed(e));
-//     }
-//   };
-// };
-
 export const todoAction = () => {
   return async (dispatch) => {
     try {
@@ -42,10 +30,7 @@ export const todoAction = () => {
           data.lewat = true;
         }
       });
-      // console.log('luar map dalam redux', item.item);
       const jsonValue = JSON.stringify(item);
-      // dispatch(getSuccess(JSON.parse(item)));
-      // dispatch(getSuccess(jsonValue));
       dispatch(getSuccess(JSON.parse(jsonValue)));
     } catch (e) {
       dispatch(getFailed(e));
