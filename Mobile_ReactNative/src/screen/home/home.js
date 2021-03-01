@@ -33,37 +33,9 @@ export default function home({navigation}) {
     };
   }, [navigation]);
 
-  // console.log('Data', data);
-
-  const handleCompleteStorage = async (index) => {
-    let item = await AsyncStorage.getItem('@storage_Key').then((item) =>
-      JSON.parse(item),
-    );
-    item.item[index]['done'] = !item.item[index]['done'];
-    const jsonValue = JSON.stringify(item);
-    await AsyncStorage.setItem('@storage_Key', jsonValue);
-    dispatch(todoAction());
-  };
-
-  const checkDueDate = async (index, date) => {
-    let item = await AsyncStorage.getItem('@storage_Key').then((item) =>
-      JSON.parse(item),
-    );
-    const limit = moment(date);
-    const now = moment().format('YYYY-MM-DD');
-    // console.log('now', now);
-    // console.log('limit', limit);
-
-    if (limit.isValid() && moment(now).isAfter(limit)) {
-      item.item[index]['lewat'] = true;
-      const jsonValue = JSON.stringify(item);
-      await AsyncStorage.setItem('@storage_Key', jsonValue);
-    }
-  };
+  console.log('Data', data);
 
   const RenderTodoStorage = ({item, index}) => {
-    checkDueDate(index, item.dueTime);
-
     let d = item.dueTime.slice(8, 10);
     let m = item.dueTime.slice(5, 7);
     let y = item.dueTime.slice(0, 4);
@@ -74,6 +46,7 @@ export default function home({navigation}) {
       time = <Text>Date: -</Text>;
     } else {
       time = <Text>Date: {dateFormat}</Text>;
+      // time = <Text>Date: {item.dueTime}</Text>;
     }
 
     let desc;
@@ -88,6 +61,7 @@ export default function home({navigation}) {
       );
     }
 
+    console.log(index + 'dalam render ', item.lewat);
     let lewat;
     if (item.lewat) {
       lewat = (
