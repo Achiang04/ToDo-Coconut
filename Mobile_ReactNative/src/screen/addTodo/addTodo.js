@@ -34,14 +34,15 @@ export default function addTodo({navigation}) {
       JSON.parse(item),
     );
     const id = uuidv4();
-    // console.log('temp 1', temp);
+    console.log('id', id);
 
     if (!checkDate) {
       dueDate = '';
     }
 
     if (category === 'Others') {
-      kategori = othersCategory;
+      // kategori = othersCategory;
+      kategori = {others: 'Others', category: othersCategory};
     }
 
     if (temp === null) {

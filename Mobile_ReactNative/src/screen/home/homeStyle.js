@@ -86,6 +86,7 @@ const styles = StyleSheet.create({
     padding: wp(2),
     alignSelf: 'flex-start',
     marginBottom: hp(5),
+    marginRight: wp(5),
   },
   categoryText: {
     color: '#fff',
@@ -113,6 +114,19 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     marginBottom: hp(5),
     marginRight: wp(5),
+  },
+  pilihJenjang: {
+    width: wp(130),
+    marginLeft: wp(20),
+    marginTop: hp(10),
+  },
+  dropStyle: {
+    backgroundColor: '#6D26FB',
+    borderColor: '#6D26FB',
+  },
+  labelStyle: {
+    fontSize: RFPercentage(2.2),
+    color: '#fff',
   },
 });
 
