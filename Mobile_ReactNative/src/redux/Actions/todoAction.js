@@ -26,7 +26,6 @@ export const todoAction = () => {
       const now = moment().format('YYYY-MM-DD');
       item.item.map((data) => {
         if (moment(now).isAfter(data.dueTime)) {
-          console.log('true');
           data.lewat = true;
         }
       });
