@@ -34,7 +34,8 @@ export default function home({navigation}) {
     };
   }, [navigation]);
 
-  // console.log('Data', data);
+  console.log('Data', data);
+  // console.log('kosong kah ? ', data.item.length());
 
   const handleCompleteStorage = async (index) => {
     let item = await AsyncStorage.getItem('@storage_Key').then((item) =>
@@ -49,6 +50,7 @@ export default function home({navigation}) {
   const handleFilterCategory = async (category) => {
     let dataTemp = [];
 
+    // console.log('category yang mau difilter', category);
     if (category !== '') {
       {
         await data.item
@@ -63,10 +65,8 @@ export default function home({navigation}) {
     return dataTemp;
   };
 
-  console.log('data', data);
-
   const RenderTodoStorage = ({item, index}) => {
-    console.log('index di render', index);
+    // console.log('index di render', index);
 
     let d = item.dueTime.slice(8, 10);
     let m = item.dueTime.slice(5, 7);
@@ -106,7 +106,7 @@ export default function home({navigation}) {
       );
     }
 
-    console.log(item.category);
+    // console.log(item.category);
     let category;
     if (item.category === undefined || item.category === '') {
       category = null;
@@ -217,7 +217,7 @@ export default function home({navigation}) {
   };
 
   let status;
-  if (data === null || data.length === 0) {
+  if (data === null) {
     status = (
       <View style={styles.statusContainer}>
         <Text style={styles.status}>Your todos empty</Text>
@@ -231,7 +231,7 @@ export default function home({navigation}) {
       handleFilterCategory(category).then((data) => {
         data.map((e) => tampungan.item.push(e));
       });
-      console.log('tampungan   1', tampungan.item);
+      // console.log('tampungan   1', tampungan.item);
       status = (
         <FlatList
           contentContainerStyle={{paddingBottom: hp(80)}}
@@ -259,7 +259,7 @@ export default function home({navigation}) {
     }
   }
 
-  console.log('status', status);
+  // console.log('status', status);
 
   const pilihCategory = () => {
     return (

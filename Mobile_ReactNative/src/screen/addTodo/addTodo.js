@@ -16,12 +16,15 @@ import CheckBox from '@react-native-community/checkbox';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import moment from 'moment';
+import {useDispatch} from 'react-redux';
 
 import Buttons from '../../reusable/Buttons/Buttons';
 import {wp, hp} from '../../reusable/responsive/dimen';
 import styles from './addTodoStyle.js';
+import {todoAction} from '../../redux/Actions/todoAction';
 
 export default function addTodo({navigation}) {
+  const dispatch = useDispatch();
   const [newTodo, setNewTodo] = useState('');
   const [todoDescription, setTodoDescription] = useState('');
   const [category, setCategory] = useState('');
@@ -29,12 +32,18 @@ export default function addTodo({navigation}) {
   const [date, setDate] = useState('');
   const [checkDate, setCheckDate] = useState(false);
 
+  console.log('------------------------------------');
   const pushdata = async (newTodo, todoDescription, kategori, dueDate) => {
-    let temp = await AsyncStorage.getItem('@storage_Key').then((item) =>
-      JSON.parse(item),
-    );
+    let temp = await AsyncStorage.getItem('@storage_Key')
+      .then((item) => JSON.parse(item))
+      .catch((e) => {
+        console.log(e);
+        throw e;
+      });
     const id = uuidv4();
     console.log('id', id);
+
+    console.log('temp', temp);
 
     if (!checkDate) {
       dueDate = '';
@@ -50,6 +59,9 @@ export default function addTodo({navigation}) {
         item: [],
       };
     }
+
+    dispatch(todoAction());
+
     temp.item.push({
       id: id,
       todo: newTodo,
