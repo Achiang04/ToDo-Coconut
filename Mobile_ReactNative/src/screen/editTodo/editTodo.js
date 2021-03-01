@@ -51,7 +51,7 @@ export default function editTodo(props) {
     if (kategori === '') {
       kategori = props.route.params.category;
     } else if (kategori === 'Others') {
-      kategori = othersCategory;
+      kategori =  kategori = {others: 'Others', category: othersCategory};
     }
 
     if (newTodo === '') {

@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, TouchableOpacity, FlatList, ScrollView} from 'react-native';
+import {View, Text, TouchableOpacity, FlatList} from 'react-native';
 
 import CheckBox from '@react-native-community/checkbox';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -10,7 +10,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import DropDownPicker from 'react-native-dropdown-picker';
 
 import styles from './homeStyle';
-import {hp} from '../../reusable/responsive/dimen';
+import {wp, hp} from '../../reusable/responsive/dimen';
 import Buttons from '../../reusable/Buttons/Buttons';
 import {todoAction} from '../../redux/Actions/todoAction';
 
