@@ -14,7 +14,7 @@ import {RFPercentage} from 'react-native-responsive-fontsize';
 import CheckBox from '@react-native-community/checkbox';
 import DatePicker from 'react-native-datepicker';
 import DropDownPicker from 'react-native-dropdown-picker';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import moment from 'moment';
 
 import Buttons from '../../reusable/Buttons/Buttons';
@@ -25,16 +25,17 @@ export default function editTodo(props) {
   const dispatch = useDispatch();
 
   const [checkDate, setCheckDate] = useState(false);
-  const [category, setCategory] = useState('');
-  const [date, setDate] = useState('');
-  const [todoDescription, setTodoDescription] = useState('');
-  const [newTodo, setNewTodo] = useState('');
   const [othersCategory, setOthersCategory] = useState('');
   const index = props.route.params.index;
+  const [data, setData] = useState({
+    todo: props.route.params.todo,
+    desc: props.route.params.desc,
+    category: props.route.params.category,
+    date: props.route.params.date,
+  });
 
-  if (!props.route.params.date === '') {
+  if (!data.date === '') {
     setCheckDate(true);
-    // console.log('checkDate', checkDate);
   }
 
   const editTodo = async (index, newTodo, desc, kategori, dueDate) => {
@@ -43,23 +44,23 @@ export default function editTodo(props) {
     );
 
     if (dueDate === '') {
-      dueDate = props.route.params.date;
+      dueDate = data.date;
     } else if (!checkDate) {
       dueDate = '';
     }
 
     if (kategori === '') {
-      kategori = props.route.params.category;
+      kategori = data.category;
     } else if (kategori === 'Others') {
-      kategori =  kategori = {others: 'Others', category: othersCategory};
+      kategori = {others: 'Others', category: othersCategory};
     }
 
     if (newTodo === '') {
-      newTodo = props.route.params.todo;
+      newTodo = data.todo;
     }
 
     if (desc === '') {
-      desc = props.route.params.desc;
+      desc = data.desc;
     }
 
     item.item[index]['todo'] = newTodo;
@@ -75,17 +76,37 @@ export default function editTodo(props) {
 
   const pilihCategory = () => {
     let tambahan;
-    if (category === 'Others') {
+    if (data.category.others === 'Others') {
       tambahan = (
         <View>
           <TextInput
             style={styles.kolomRespon3}
-            placeholder={props.route.params.category}
+            placeholder={data.category.category}
             placeholderTextColor={'#fff'}
             onChangeText={(e) => setOthersCategory(e)}
+            value={othersCategory}
           />
         </View>
       );
+    } else if (data.category === 'Others') {
+      tambahan = (
+        <View>
+          <TextInput
+            style={styles.kolomRespon3}
+            placeholder={othersCategory}
+            placeholderTextColor={'#fff'}
+            onChangeText={(e) => setOthersCategory(e)}
+            value={othersCategory}
+          />
+        </View>
+      );
+    }
+
+    let kondisi;
+    if (data.category.others === 'Others') {
+      kondisi = data.category.others === '' ? 'Category' : data.category.others;
+    } else {
+      kondisi = data.category === '' ? 'Category' : data.category;
     }
 
     return (
@@ -106,14 +127,10 @@ export default function editTodo(props) {
             activeLabelStyle={{color: 'pink'}}
             defaultNull
             labelStyle={styles.labelStyle}
-            placeholder={
-              props.route.params.category === ''
-                ? 'Category'
-                : props.route.params.category
-            }
+            placeholder={kondisi}
             containerStyle={{height: hp(40)}}
             onChangeItem={(item) => {
-              setCategory(item.value);
+              setData({...data, ['category']: item.value});
             }}
           />
         </View>
@@ -128,13 +145,9 @@ export default function editTodo(props) {
       return (
         <DatePicker
           style={styles.datePickerStyle}
-          date={date}
+          date={data.date}
           mode="date"
-          placeholder={
-            props.route.params.date === ''
-              ? 'Select Date'
-              : props.route.params.date
-          }
+          placeholder={data.date === '' ? 'Select Date' : data.date}
           format="YYYY-MM-DD"
           minDate={now}
           maxDate="2030-01-01"
@@ -157,7 +170,7 @@ export default function editTodo(props) {
             },
           }}
           onDateChange={(date) => {
-            setDate(date);
+            setData({...data, ['date']: date});
           }}
         />
       );
@@ -196,23 +209,25 @@ export default function editTodo(props) {
         <View>{pilihCategory()}</View>
         <TextInput
           style={styles.kolomRespon1}
-          placeholder={props.route.params.todo}
+          placeholder={data.todo === '' ? '...' : data.todo}
           placeholderTextColor={'#fff'}
-          onChangeText={(e) => setNewTodo(e)}
+          onChangeText={(e) => setData({...data, ['todo']: e})}
+          value={data.todo}
         />
         <TextInput
           multiline
           style={styles.kolomRespon2}
-          placeholder={props.route.params.desc}
+          placeholder={data.desc === '' ? '...' : data.desc}
           textAlignVertical={'top'}
           placeholderTextColor={'#fff'}
-          onChangeText={(e) => setTodoDescription(e)}
+          onChangeText={(e) => setData({...data, ['desc']: e})}
+          value={data.desc}
         />
         <View style={styles.button}>
           <Buttons
             text={'Update Todo'}
             press={() =>
-              editTodo(index, newTodo, todoDescription, category, date)
+              editTodo(index, data.todo, data.desc, data.category, data.date)
             }
           />
         </View>

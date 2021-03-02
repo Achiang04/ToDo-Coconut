@@ -21,16 +21,15 @@ import {useDispatch} from 'react-redux';
 import Buttons from '../../reusable/Buttons/Buttons';
 import {wp, hp} from '../../reusable/responsive/dimen';
 import styles from './addTodoStyle.js';
-import {todoAction} from '../../redux/Actions/todoAction';
 
 export default function addTodo({navigation}) {
-  const dispatch = useDispatch();
   const [newTodo, setNewTodo] = useState('');
   const [todoDescription, setTodoDescription] = useState('');
   const [category, setCategory] = useState('');
   const [othersCategory, setOthersCategory] = useState('');
   const [date, setDate] = useState('');
   const [checkDate, setCheckDate] = useState(false);
+  const [validTOdo, setValidTodo] = useState(true);
 
   console.log('------------------------------------');
   const pushdata = async (newTodo, todoDescription, kategori, dueDate) => {
@@ -41,9 +40,9 @@ export default function addTodo({navigation}) {
         throw e;
       });
     const id = uuidv4();
-    console.log('id', id);
+    // console.log('id', id);
 
-    console.log('temp', temp);
+    // console.log('temp', temp);
 
     if (!checkDate) {
       dueDate = '';
@@ -59,8 +58,6 @@ export default function addTodo({navigation}) {
         item: [],
       };
     }
-
-    dispatch(todoAction());
 
     temp.item.push({
       id: id,
@@ -161,6 +158,16 @@ export default function addTodo({navigation}) {
     }
   };
 
+  let valid;
+  if (validTOdo === false) {
+    valid = (
+      <Text style={styles.validText}>
+        {' '}
+        ** Todo can't be empty and at least 3 letters
+      </Text>
+    );
+  }
+
   return (
     <TouchableWithoutFeedback
       onPress={() => {
@@ -197,6 +204,7 @@ export default function addTodo({navigation}) {
           placeholderTextColor={'#fff'}
           onChangeText={(e) => setNewTodo(e)}
         />
+        {valid}
         <TextInput
           multiline
           style={styles.kolomRespon2}
@@ -208,7 +216,15 @@ export default function addTodo({navigation}) {
         <View style={styles.button}>
           <Buttons
             text={'Create Todo'}
-            press={() => pushdata(newTodo, todoDescription, category, date)}
+            press={() => {
+              if (newTodo === '') {
+                setValidTodo(false);
+              } else if (newTodo.length <= 2) {
+                setValidTodo(false);
+              } else {
+                pushdata(newTodo, todoDescription, category, date);
+              }
+            }}
           />
         </View>
       </View>

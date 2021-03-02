@@ -17,8 +17,8 @@ import {todoAction} from '../../redux/Actions/todoAction';
 export default function home({navigation}) {
   const dispatch = useDispatch();
 
-  const [category, setCategory] = useState('');
-  const [categorySelected, setCategorySelected] = useState(false);
+  const [statusFilter, setStatusFilter] = useState('');
+  const [statusSelected, setStatusSelected] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
   const data = useSelector((state) => state.todoReducer.data);
 
@@ -47,20 +47,25 @@ export default function home({navigation}) {
     dispatch(todoAction());
   };
 
-  const handleFilterCategory = async (category) => {
+  const handleFilterStatus = async (status) => {
     let dataTemp = [];
+    // console.log('done', data.item);
 
-    // console.log('category yang mau difilter', category);
-    if (category !== '') {
-      {
-        await data.item
-          .filter((item) => item.category === category)
-          .map((filteredCategory) => {
-            // console.log('filteredCategory', filteredCategory);
-            dataTemp.push(filteredCategory);
-          });
-      }
+    let filter;
+    if (status === 'true') {
+      filter = true;
+    } else {
+      filter = false;
     }
+
+    await data.item
+      .filter((item) => item.done == filter)
+      .map((statusFiltered) => {
+        // console.log('statusFiltered', statusFiltered);
+        dataTemp.push(statusFiltered);
+      });
+
+    // }
     // console.log('data hasil filter ?', dataTemp);
     return dataTemp;
   };
@@ -198,7 +203,7 @@ export default function home({navigation}) {
           }>
           <FontAwesome5
             name={'edit'}
-            size={RFPercentage(2.4)}
+            size={RFPercentage(2.5)}
             color={item.done ? '#6D26FB' : '#fff'}
           />
         </TouchableOpacity>
@@ -216,22 +221,53 @@ export default function home({navigation}) {
     );
   };
 
+  const pilihStatus = () => {
+    return (
+      <View style={[styles.pilihJenjang]}>
+        <DropDownPicker
+          items={[
+            {label: 'All', value: 'All'},
+            {label: 'Done', value: 'true'},
+            {label: 'On Progress', value: 'false'},
+          ]}
+          style={styles.dropStyle}
+          dropDownStyle={{backgroundColor: '#6D26FB'}}
+          activeLabelStyle={{color: 'pink'}}
+          defaultNull
+          labelStyle={styles.labelStyle}
+          placeholder="All"
+          containerStyle={{height: hp(40)}}
+          onChangeItem={(item) => {
+            if (item.value === 'All') {
+              setStatusSelected(false);
+              setStatusFilter(item.value);
+            } else {
+              setStatusSelected(true);
+              setStatusFilter(item.value);
+            }
+          }}
+        />
+      </View>
+    );
+  };
+
   let status;
-  if (data === null) {
+  if (data === null || data.length === 0) {
+    console.log('masuk ke sini ?');
     status = (
       <View style={styles.statusContainer}>
         <Text style={styles.status}>Your todos empty</Text>
       </View>
     );
   } else {
-    if (categorySelected) {
+    if (statusSelected) {
       const tampungan = {
         item: [],
       };
-      handleFilterCategory(category).then((data) => {
+      handleFilterStatus(statusFilter).then((data) => {
         data.map((e) => tampungan.item.push(e));
       });
-      // console.log('tampungan   1', tampungan.item);
+      console.log('tampungan', tampungan.item);
       status = (
         <FlatList
           contentContainerStyle={{paddingBottom: hp(80)}}
@@ -239,8 +275,7 @@ export default function home({navigation}) {
           data={tampungan.item}
           extraData={selectedId}
           renderItem={({item, index}) => {
-            let trueIndex = index + 1;
-            return <RenderTodoStorage item={item} index={trueIndex} />;
+            return <RenderTodoStorage item={item} index={index} />;
           }}
         />
       );
@@ -259,47 +294,10 @@ export default function home({navigation}) {
     }
   }
 
-  // console.log('status', status);
-
-  const pilihCategory = () => {
-    return (
-      <View style={[styles.pilihJenjang]}>
-        <DropDownPicker
-          items={[
-            {label: 'All', value: 'All'},
-            {label: 'Work', value: 'Work'},
-            {label: 'Health', value: 'Health'},
-            {label: 'Meeting', value: 'Meeting'},
-            {label: 'Cooking', value: 'Cooking'},
-            {label: 'Payment', value: 'Payment'},
-            {label: 'Ideas', value: 'Ideas'},
-            {label: 'Others', value: 'Others'},
-          ]}
-          style={styles.dropStyle}
-          dropDownStyle={{backgroundColor: '#6D26FB'}}
-          activeLabelStyle={{color: 'pink'}}
-          defaultNull
-          labelStyle={styles.labelStyle}
-          placeholder="All"
-          containerStyle={{height: hp(40)}}
-          onChangeItem={(item) => {
-            if (item.value === 'All') {
-              setCategorySelected(false);
-              setCategory(item.value);
-            } else {
-              setCategorySelected(true);
-              setCategory(item.value);
-            }
-          }}
-        />
-      </View>
-    );
-  };
-
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Todos</Text>
-      {pilihCategory()}
+      {pilihStatus()}
       {status}
       <View style={styles.button}>
         <Buttons

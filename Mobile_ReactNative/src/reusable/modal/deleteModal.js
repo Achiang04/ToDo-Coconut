@@ -1,12 +1,5 @@
 import React, {useState} from 'react';
-import {
-  Alert,
-  Modal,
-  TouchableOpacity,
-  Text,
-  Pressable,
-  View,
-} from 'react-native';
+import {Modal, TouchableOpacity, Text, Pressable, View} from 'react-native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {RFPercentage} from 'react-native-responsive-fontsize';
@@ -17,9 +10,9 @@ import {todoAction} from '../../redux/Actions/todoAction';
 import styles from './deleteModalStyle.js';
 
 const DeleteModal = (props) => {
+  const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
   const index = props.index;
-  const dispatch = useDispatch();
 
   // console.log(index);
 
@@ -43,7 +36,6 @@ const DeleteModal = (props) => {
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
           setModalVisible(!modalVisible);
         }}>
         <View style={styles.centeredView}>
