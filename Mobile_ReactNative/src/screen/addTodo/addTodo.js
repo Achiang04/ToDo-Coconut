@@ -16,6 +16,7 @@ import CheckBox from '@react-native-community/checkbox';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import moment from 'moment';
+import {useDispatch} from 'react-redux';
 
 import Buttons from '../../reusable/Buttons/Buttons';
 import {wp, hp} from '../../reusable/responsive/dimen';
@@ -28,13 +29,20 @@ export default function addTodo({navigation}) {
   const [othersCategory, setOthersCategory] = useState('');
   const [date, setDate] = useState('');
   const [checkDate, setCheckDate] = useState(false);
+  const [validTOdo, setValidTodo] = useState(true);
 
+  console.log('------------------------------------');
   const pushdata = async (newTodo, todoDescription, kategori, dueDate) => {
-    let temp = await AsyncStorage.getItem('@storage_Key').then((item) =>
-      JSON.parse(item),
-    );
+    let temp = await AsyncStorage.getItem('@storage_Key')
+      .then((item) => JSON.parse(item))
+      .catch((e) => {
+        console.log(e);
+        throw e;
+      });
     const id = uuidv4();
-    console.log('id', id);
+    // console.log('id', id);
+
+    // console.log('temp', temp);
 
     if (!checkDate) {
       dueDate = '';
@@ -50,6 +58,7 @@ export default function addTodo({navigation}) {
         item: [],
       };
     }
+
     temp.item.push({
       id: id,
       todo: newTodo,
@@ -149,6 +158,16 @@ export default function addTodo({navigation}) {
     }
   };
 
+  let valid;
+  if (validTOdo === false) {
+    valid = (
+      <Text style={styles.validText}>
+        {' '}
+        ** Todo can't be empty and at least 3 letters
+      </Text>
+    );
+  }
+
   return (
     <TouchableWithoutFeedback
       onPress={() => {
@@ -185,6 +204,7 @@ export default function addTodo({navigation}) {
           placeholderTextColor={'#fff'}
           onChangeText={(e) => setNewTodo(e)}
         />
+        {valid}
         <TextInput
           multiline
           style={styles.kolomRespon2}
@@ -196,7 +216,15 @@ export default function addTodo({navigation}) {
         <View style={styles.button}>
           <Buttons
             text={'Create Todo'}
-            press={() => pushdata(newTodo, todoDescription, category, date)}
+            press={() => {
+              if (newTodo === '') {
+                setValidTodo(false);
+              } else if (newTodo.length <= 2) {
+                setValidTodo(false);
+              } else {
+                pushdata(newTodo, todoDescription, category, date);
+              }
+            }}
           />
         </View>
       </View>

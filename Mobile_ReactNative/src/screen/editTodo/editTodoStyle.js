@@ -92,6 +92,12 @@ const styles = StyleSheet.create({
     fontSize: RFPercentage(2.2),
     color: '#fff',
   },
+  validText: {
+    color: 'red',
+    marginLeft: wp(20),
+    marginTop: hp(5),
+    fontSize: RFPercentage(2.1),
+  },
 });
 
 export default styles;

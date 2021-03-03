@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, TouchableOpacity, FlatList, ScrollView} from 'react-native';
+import {View, Text, TouchableOpacity, FlatList} from 'react-native';
 
 import CheckBox from '@react-native-community/checkbox';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -10,15 +10,15 @@ import {useDispatch, useSelector} from 'react-redux';
 import DropDownPicker from 'react-native-dropdown-picker';
 
 import styles from './homeStyle';
-import {hp} from '../../reusable/responsive/dimen';
+import {wp, hp} from '../../reusable/responsive/dimen';
 import Buttons from '../../reusable/Buttons/Buttons';
 import {todoAction} from '../../redux/Actions/todoAction';
 
 export default function home({navigation}) {
   const dispatch = useDispatch();
 
-  const [category, setCategory] = useState('');
-  const [categorySelected, setCategorySelected] = useState(false);
+  const [statusFilter, setStatusFilter] = useState('');
+  const [statusSelected, setStatusSelected] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
   const data = useSelector((state) => state.todoReducer.data);
 
@@ -37,6 +37,7 @@ export default function home({navigation}) {
   // console.log('Data', data);
 
   const handleCompleteStorage = async (index) => {
+    console.log('index di render', index);
     let item = await AsyncStorage.getItem('@storage_Key').then((item) =>
       JSON.parse(item),
     );
@@ -46,28 +47,7 @@ export default function home({navigation}) {
     dispatch(todoAction());
   };
 
-  const handleFilterCategory = async (category) => {
-    let dataTemp = [];
-
-    if (category !== '') {
-      {
-        await data.item
-          .filter((item) => item.category === category)
-          .map((filteredCategory) => {
-            // console.log('filteredCategory', filteredCategory);
-            dataTemp.push(filteredCategory);
-          });
-      }
-    }
-    // console.log('data hasil filter ?', dataTemp);
-    return dataTemp;
-  };
-
-  console.log('data', data);
-
   const RenderTodoStorage = ({item, index}) => {
-    console.log('index di render', index);
-
     let d = item.dueTime.slice(8, 10);
     let m = item.dueTime.slice(5, 7);
     let y = item.dueTime.slice(0, 4);
@@ -106,7 +86,7 @@ export default function home({navigation}) {
       );
     }
 
-    console.log(item.category);
+    // console.log(item.category);
     let category;
     if (item.category === undefined || item.category === '') {
       category = null;
@@ -198,7 +178,7 @@ export default function home({navigation}) {
           }>
           <FontAwesome5
             name={'edit'}
-            size={RFPercentage(2.4)}
+            size={RFPercentage(2.5)}
             color={item.done ? '#6D26FB' : '#fff'}
           />
         </TouchableOpacity>
@@ -216,22 +196,65 @@ export default function home({navigation}) {
     );
   };
 
+  const pilihStatus = () => {
+    return (
+      <View style={[styles.pilihJenjang]}>
+        <DropDownPicker
+          items={[
+            {label: 'All', value: 'All'},
+            {label: 'Done', value: 'true'},
+            {label: 'On Progress', value: 'false'},
+          ]}
+          style={styles.dropStyle}
+          dropDownStyle={{backgroundColor: '#6D26FB'}}
+          activeLabelStyle={{color: 'pink'}}
+          defaultNull
+          labelStyle={styles.labelStyle}
+          placeholder="All"
+          containerStyle={{height: hp(40)}}
+          onChangeItem={(item) => {
+            if (item.value === 'All') {
+              setStatusSelected(false);
+              setStatusFilter(item.value);
+            } else {
+              setStatusSelected(true);
+              setStatusFilter(item.value);
+            }
+          }}
+        />
+      </View>
+    );
+  };
+
   let status;
   if (data === null || data.length === 0) {
+    console.log('masuk ke sini ?');
     status = (
       <View style={styles.statusContainer}>
         <Text style={styles.status}>Your todos empty</Text>
       </View>
     );
   } else {
-    if (categorySelected) {
+    if (statusSelected) {
       const tampungan = {
         item: [],
       };
-      handleFilterCategory(category).then((data) => {
-        data.map((e) => tampungan.item.push(e));
-      });
-      console.log('tampungan   1', tampungan.item);
+
+      let filter;
+      if (statusFilter === 'true') {
+        filter = true;
+      } else {
+        filter = false;
+      }
+
+      data.item
+        .filter((item) => item.done == filter)
+        .map((statusFiltered) => {
+          // console.log('statusFiltered', statusFiltered);
+          tampungan.item.push(statusFiltered);
+        });
+
+      // console.log('tampungan', tampungan);
       status = (
         <FlatList
           contentContainerStyle={{paddingBottom: hp(80)}}
@@ -239,8 +262,7 @@ export default function home({navigation}) {
           data={tampungan.item}
           extraData={selectedId}
           renderItem={({item, index}) => {
-            let trueIndex = index + 1;
-            return <RenderTodoStorage item={item} index={trueIndex} />;
+            return <RenderTodoStorage item={item} index={index} />;
           }}
         />
       );
@@ -259,47 +281,10 @@ export default function home({navigation}) {
     }
   }
 
-  console.log('status', status);
-
-  const pilihCategory = () => {
-    return (
-      <View style={[styles.pilihJenjang]}>
-        <DropDownPicker
-          items={[
-            {label: 'All', value: 'All'},
-            {label: 'Work', value: 'Work'},
-            {label: 'Health', value: 'Health'},
-            {label: 'Meeting', value: 'Meeting'},
-            {label: 'Cooking', value: 'Cooking'},
-            {label: 'Payment', value: 'Payment'},
-            {label: 'Ideas', value: 'Ideas'},
-            {label: 'Others', value: 'Others'},
-          ]}
-          style={styles.dropStyle}
-          dropDownStyle={{backgroundColor: '#6D26FB'}}
-          activeLabelStyle={{color: 'pink'}}
-          defaultNull
-          labelStyle={styles.labelStyle}
-          placeholder="All"
-          containerStyle={{height: hp(40)}}
-          onChangeItem={(item) => {
-            if (item.value === 'All') {
-              setCategorySelected(false);
-              setCategory(item.value);
-            } else {
-              setCategorySelected(true);
-              setCategory(item.value);
-            }
-          }}
-        />
-      </View>
-    );
-  };
-
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Todos</Text>
-      {pilihCategory()}
+      {pilihStatus()}
       {status}
       <View style={styles.button}>
         <Buttons
