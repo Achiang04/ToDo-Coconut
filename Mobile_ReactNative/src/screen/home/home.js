@@ -222,11 +222,14 @@ export default function home({navigation}) {
     );
   };
 
+  console.log(data);
+  console.log(data.item);
+
   let status;
-  if (data === null || data.length === 0) {
+  if (data === null || !(data.item && data.item.length)) {
     status = (
       <View style={styles.statusContainer}>
-        <Text style={styles.status}>Your todos empty</Text>
+        <Text style={styles.status}>Your Todos Empty</Text>
       </View>
     );
   } else {
@@ -252,7 +255,7 @@ export default function home({navigation}) {
         status = (
           <View style={styles.statusContainer}>
             <Text style={styles.status}>
-              {filter ? 'No Todos Done' : 'No Todos OnProgess'}
+              {filter ? 'No Todos Done' : 'Your Todos Empty'}
             </Text>
           </View>
         );

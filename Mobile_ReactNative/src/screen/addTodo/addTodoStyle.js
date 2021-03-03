@@ -3,6 +3,9 @@ import {wp, hp} from '../../reusable/responsive/dimen';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   modalView: {
     flex: 1,
     backgroundColor: '#160E24',

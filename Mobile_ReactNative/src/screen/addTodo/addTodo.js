@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   View,
   TouchableWithoutFeedback,
+  KeyboardAvoidingView,
   Keyboard,
 } from 'react-native';
 
@@ -162,65 +163,69 @@ export default function addTodo({navigation}) {
   }
 
   return (
-    <TouchableWithoutFeedback
-      onPress={() => {
-        Keyboard.dismiss();
-      }}>
-      <View style={styles.modalView}>
-        <View style={styles.back}>
-          <TouchableOpacity
-            style={styles.icon}
-            onPress={() => navigation.goBack()}>
-            <Ionicons
-              name={'arrow-back-outline'}
-              size={RFPercentage(5)}
-              color={'white'}
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}>
+      <TouchableWithoutFeedback
+        onPress={() => {
+          Keyboard.dismiss();
+        }}>
+        <View style={styles.modalView}>
+          <View style={styles.back}>
+            <TouchableOpacity
+              style={styles.icon}
+              onPress={() => navigation.goBack()}>
+              <Ionicons
+                name={'arrow-back-outline'}
+                size={RFPercentage(5)}
+                color={'white'}
+              />
+            </TouchableOpacity>
+            <Text style={styles.title}>New Todo</Text>
+          </View>
+          <View style={styles.row}>
+            <CheckBox
+              value={checkDate}
+              tintColors={{true: '#6D26FB', false: '#fff'}}
+              onValueChange={() => setCheckDate(!checkDate)}
             />
-          </TouchableOpacity>
-          <Text style={styles.title}>New Todo</Text>
-        </View>
-        <View style={styles.row}>
-          <CheckBox
-            value={checkDate}
-            tintColors={{true: '#6D26FB', false: '#fff'}}
-            onValueChange={() => setCheckDate(!checkDate)}
+            <TouchableOpacity onPress={() => setCheckDate(!checkDate)}>
+              <Text style={styles.useDate}>Do you want to use Date ?</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.tanggalContainer}>{pilihTanggal()}</View>
+          <View>{pilihCategory()}</View>
+          <TextInput
+            style={styles.kolomRespon1}
+            placeholder={'Todo ...'}
+            placeholderTextColor={'#fff'}
+            onChangeText={(e) => setNewTodo(e)}
           />
-          <TouchableOpacity onPress={() => setCheckDate(!checkDate)}>
-            <Text style={styles.useDate}>Do you want to use Date ?</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.tanggalContainer}>{pilihTanggal()}</View>
-        <View>{pilihCategory()}</View>
-        <TextInput
-          style={styles.kolomRespon1}
-          placeholder={'Todo ...'}
-          placeholderTextColor={'#fff'}
-          onChangeText={(e) => setNewTodo(e)}
-        />
-        {valid}
-        <TextInput
-          multiline
-          style={styles.kolomRespon2}
-          placeholder={'Todo Description ...'}
-          textAlignVertical={'top'}
-          placeholderTextColor={'#fff'}
-          onChangeText={(e) => setTodoDescription(e)}
-        />
-        <View style={styles.button}>
-          <Buttons
-            text={'Create Todo'}
-            press={() => {
-              if (newTodo === '') {
-                setValidTodo(false);
-              } else if (newTodo.length <= 2) {
-                setValidTodo(false);
-              } else {
-                pushdata(newTodo, todoDescription, category, date);
-              }
-            }}
+          {valid}
+          <TextInput
+            multiline
+            style={styles.kolomRespon2}
+            placeholder={'Todo Description ...'}
+            textAlignVertical={'top'}
+            placeholderTextColor={'#fff'}
+            onChangeText={(e) => setTodoDescription(e)}
           />
+          <View style={styles.button}>
+            <Buttons
+              text={'Create Todo'}
+              press={() => {
+                if (newTodo === '') {
+                  setValidTodo(false);
+                } else if (newTodo.length <= 2) {
+                  setValidTodo(false);
+                } else {
+                  pushdata(newTodo, todoDescription, category, date);
+                }
+              }}
+            />
+          </View>
         </View>
-      </View>
-    </TouchableWithoutFeedback>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 }
