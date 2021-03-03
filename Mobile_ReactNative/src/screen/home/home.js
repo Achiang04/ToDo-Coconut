@@ -144,7 +144,7 @@ export default function home({navigation}) {
     if (item.id === selectedId) {
       deleteIcon = (
         <View style={styles.delete}>
-          <DeleteModal id={item.id} todo={item.todo} done={item.done} />
+          <DeleteModal id={item.id} done={item.done} />
         </View>
       );
     }

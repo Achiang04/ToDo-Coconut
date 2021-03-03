@@ -13,16 +13,15 @@ const DeleteModal = (props) => {
   const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
   const id = props.id;
-  const todo = props.todo;
 
-  const handleDeleteStorage = async (id, todo) => {
+  const handleDeleteStorage = async (id) => {
     let item = await AsyncStorage.getItem('@storage_Key').then((item) =>
       JSON.parse(item),
     );
 
     item.item.splice(
       item.item.findIndex(function (i) {
-        return i.id === todo;
+        return i.id === id;
       }),
       1,
     );
@@ -56,7 +55,7 @@ const DeleteModal = (props) => {
                 style={styles.yesButton}
                 onPress={() => [
                   setModalVisible(!modalVisible),
-                  handleDeleteStorage(id, todo),
+                  handleDeleteStorage(id),
                 ]}>
                 <Text style={styles.textStyle}>Delete</Text>
               </Pressable>
