@@ -222,9 +222,6 @@ export default function home({navigation}) {
     );
   };
 
-  console.log(data);
-  console.log(data.item);
-
   let status;
   if (data === null || !(data.item && data.item.length)) {
     status = (
