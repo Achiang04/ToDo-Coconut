@@ -253,17 +253,27 @@ export default function home({navigation}) {
           tampungan.item.push(statusFiltered);
         });
 
-      status = (
-        <FlatList
-          contentContainerStyle={{paddingBottom: hp(80)}}
-          showsVerticalScrollIndicator={false}
-          data={tampungan.item}
-          extraData={selectedId}
-          renderItem={({item, index}) => {
-            return <RenderTodoStorage item={item} index={index} />;
-          }}
-        />
-      );
+      if (tampungan.item.length === 0) {
+        status = (
+          <View style={styles.statusContainer}>
+            <Text style={styles.status}>
+              {filter ? 'No Todos Done' : 'No Todos OnProgess'}
+            </Text>
+          </View>
+        );
+      } else {
+        status = (
+          <FlatList
+            contentContainerStyle={{paddingBottom: hp(80)}}
+            showsVerticalScrollIndicator={false}
+            data={tampungan.item}
+            extraData={selectedId}
+            renderItem={({item, index}) => {
+              return <RenderTodoStorage item={item} index={index} />;
+            }}
+          />
+        );
+      }
     } else {
       status = (
         <FlatList
