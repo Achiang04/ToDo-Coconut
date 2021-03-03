@@ -78,12 +78,7 @@ export default function home({navigation}) {
     if (item.lewat) {
       lewat = (
         <View style={styles.lewatContainer}>
-          <Text
-            style={
-              item.lewat ? styles.categoryTextSelected : styles.categoryText
-            }>
-            Missed
-          </Text>
+          <Text style={styles.lewatText}>Missed</Text>
         </View>
       );
     }
@@ -149,7 +144,7 @@ export default function home({navigation}) {
     if (item.id === selectedId) {
       deleteIcon = (
         <View style={styles.delete}>
-          <DeleteModal index={index} done={item.done} />
+          <DeleteModal id={item.id} todo={item.todo} done={item.done} />
         </View>
       );
     }
@@ -169,7 +164,7 @@ export default function home({navigation}) {
           style={styles.edit}
           onPress={() =>
             navigation.navigate('editTodo', {
-              index: index,
+              id: item.id,
               todo: item.todo,
               desc: item.description,
               category: item.category,

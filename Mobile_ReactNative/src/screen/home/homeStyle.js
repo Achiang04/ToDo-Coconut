@@ -115,6 +115,11 @@ const styles = StyleSheet.create({
     marginBottom: hp(5),
     marginRight: wp(5),
   },
+  lewatText: {
+    color: '#fff',
+    fontSize: RFPercentage(2),
+    textDecorationLine: 'line-through',
+  },
   pilihJenjang: {
     width: wp(130),
     marginLeft: wp(20),

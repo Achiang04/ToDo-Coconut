@@ -12,13 +12,21 @@ import styles from './deleteModalStyle.js';
 const DeleteModal = (props) => {
   const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
-  const index = props.index;
+  const id = props.id;
+  const todo = props.todo;
 
-  const handleDeleteStorage = async (index) => {
+  const handleDeleteStorage = async (id, todo) => {
     let item = await AsyncStorage.getItem('@storage_Key').then((item) =>
       JSON.parse(item),
     );
-    item.item.splice(index, 1);
+
+    item.item.splice(
+      item.item.findIndex(function (i) {
+        return i.id === todo;
+      }),
+      1,
+    );
+
     const jsonValue = JSON.stringify(item);
     await AsyncStorage.setItem('@storage_Key', jsonValue);
     dispatch(todoAction());
@@ -48,7 +56,7 @@ const DeleteModal = (props) => {
                 style={styles.yesButton}
                 onPress={() => [
                   setModalVisible(!modalVisible),
-                  handleDeleteStorage(index),
+                  handleDeleteStorage(id, todo),
                 ]}>
                 <Text style={styles.textStyle}>Delete</Text>
               </Pressable>

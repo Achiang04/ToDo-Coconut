@@ -28,47 +28,41 @@ export default function editTodo(props) {
   const [checkDate, setCheckDate] = useState(false);
   const [validTOdo, setValidTodo] = useState(true);
   const [othersCategory, setOthersCategory] = useState('');
-  const index = props.route.params.index;
   const [data, setData] = useState({
+    id: props.route.params.id,
     todo: props.route.params.todo,
     desc: props.route.params.desc,
     category: props.route.params.category,
     date: props.route.params.date,
   });
 
-  if (!data.date === '') {
-    setCheckDate(true);
-  }
-
-  const editTodo = async (index, newTodo, desc, kategori, dueDate) => {
+  const editTodo = async (id, newTodo, desc, kategori, dueDate) => {
     let item = await AsyncStorage.getItem('@storage_Key').then((item) =>
       JSON.parse(item),
     );
 
-    if (dueDate === '') {
+    if (checkDate) {
       dueDate = data.date;
-    } else if (!checkDate) {
-      dueDate = '';
+    } else {
+      if (data.date !== '') {
+        dueDate = data.date;
+      } else {
+        dueDate = '';
+      }
     }
 
-    if (kategori === '') {
-      kategori = data.category;
-    } else if (kategori === 'Others') {
+    if (kategori === 'Others') {
       kategori = {others: 'Others', category: othersCategory};
     }
 
-    if (newTodo === '') {
-      newTodo = data.todo;
-    }
-
-    if (desc === '') {
-      desc = data.desc;
-    }
-
-    item.item[index]['todo'] = newTodo;
-    item.item[index]['description'] = desc;
-    item.item[index]['category'] = kategori;
-    item.item[index]['dueTime'] = dueDate;
+    item.item.map((data) => {
+      if (data.id === id) {
+        data.todo = newTodo;
+        data.description = desc;
+        data.category = kategori;
+        data.dueTime = dueDate;
+      }
+    });
 
     const jsonValue = JSON.stringify(item);
     await AsyncStorage.setItem('@storage_Key', jsonValue);
@@ -214,7 +208,7 @@ export default function editTodo(props) {
             onValueChange={() => setCheckDate(!checkDate)}
           />
           <TouchableOpacity onPress={() => setCheckDate(!checkDate)}>
-            <Text style={styles.useDate}>Do you want to use Date ?</Text>
+            <Text style={styles.useDate}>Do you want to change Date ?</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.tanggalContainer}>{pilihTanggal()}</View>
@@ -245,7 +239,13 @@ export default function editTodo(props) {
               } else if (data.todo.length <= 2) {
                 setValidTodo(false);
               } else {
-                editTodo(index, data.todo, data.desc, data.category, data.date);
+                editTodo(
+                  data.id,
+                  data.todo,
+                  data.desc,
+                  data.category,
+                  data.date,
+                );
               }
             }}
           />
