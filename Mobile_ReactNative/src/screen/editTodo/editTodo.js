@@ -14,7 +14,7 @@ import {RFPercentage} from 'react-native-responsive-fontsize';
 import CheckBox from '@react-native-community/checkbox';
 import DatePicker from 'react-native-datepicker';
 import DropDownPicker from 'react-native-dropdown-picker';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import moment from 'moment';
 
 import Buttons from '../../reusable/Buttons/Buttons';

@@ -14,19 +14,14 @@ const DeleteModal = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
   const index = props.index;
 
-  // console.log(index);
-
   const handleDeleteStorage = async (index) => {
     let item = await AsyncStorage.getItem('@storage_Key').then((item) =>
       JSON.parse(item),
     );
-    // console.log('data delete', item);
-    // console.log('nomor', index);
     item.item.splice(index, 1);
     const jsonValue = JSON.stringify(item);
     await AsyncStorage.setItem('@storage_Key', jsonValue);
     dispatch(todoAction());
-    // console.log(`success delete index ${index}`);
   };
 
   return (

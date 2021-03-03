@@ -16,7 +16,6 @@ import CheckBox from '@react-native-community/checkbox';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import moment from 'moment';
-import {useDispatch} from 'react-redux';
 
 import Buttons from '../../reusable/Buttons/Buttons';
 import {wp, hp} from '../../reusable/responsive/dimen';
@@ -31,25 +30,20 @@ export default function addTodo({navigation}) {
   const [checkDate, setCheckDate] = useState(false);
   const [validTOdo, setValidTodo] = useState(true);
 
-  console.log('------------------------------------');
   const pushdata = async (newTodo, todoDescription, kategori, dueDate) => {
     let temp = await AsyncStorage.getItem('@storage_Key')
       .then((item) => JSON.parse(item))
       .catch((e) => {
-        console.log(e);
         throw e;
       });
-    const id = uuidv4();
-    // console.log('id', id);
 
-    // console.log('temp', temp);
+    const id = uuidv4();
 
     if (!checkDate) {
       dueDate = '';
     }
 
     if (category === 'Others') {
-      // kategori = othersCategory;
       kategori = {others: 'Others', category: othersCategory};
     }
 
@@ -69,7 +63,6 @@ export default function addTodo({navigation}) {
       done: false,
     });
 
-    // console.log('temp 2', temp);
     const jsonValue = JSON.stringify(temp);
     await AsyncStorage.setItem('@storage_Key', jsonValue);
     navigation.replace('Home');
