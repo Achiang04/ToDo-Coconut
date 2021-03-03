@@ -34,10 +34,10 @@ export default function home({navigation}) {
     };
   }, [navigation]);
 
-  console.log('Data', data);
-  // console.log('kosong kah ? ', data.item.length());
+  // console.log('Data', data);
 
   const handleCompleteStorage = async (index) => {
+    console.log('index di render', index);
     let item = await AsyncStorage.getItem('@storage_Key').then((item) =>
       JSON.parse(item),
     );
@@ -47,32 +47,7 @@ export default function home({navigation}) {
     dispatch(todoAction());
   };
 
-  const handleFilterStatus = async (status) => {
-    let dataTemp = [];
-    // console.log('done', data.item);
-
-    let filter;
-    if (status === 'true') {
-      filter = true;
-    } else {
-      filter = false;
-    }
-
-    await data.item
-      .filter((item) => item.done == filter)
-      .map((statusFiltered) => {
-        // console.log('statusFiltered', statusFiltered);
-        dataTemp.push(statusFiltered);
-      });
-
-    // }
-    // console.log('data hasil filter ?', dataTemp);
-    return dataTemp;
-  };
-
   const RenderTodoStorage = ({item, index}) => {
-    // console.log('index di render', index);
-
     let d = item.dueTime.slice(8, 10);
     let m = item.dueTime.slice(5, 7);
     let y = item.dueTime.slice(0, 4);
@@ -264,10 +239,22 @@ export default function home({navigation}) {
       const tampungan = {
         item: [],
       };
-      handleFilterStatus(statusFilter).then((data) => {
-        data.map((e) => tampungan.item.push(e));
-      });
-      console.log('tampungan', tampungan.item);
+
+      let filter;
+      if (statusFilter === 'true') {
+        filter = true;
+      } else {
+        filter = false;
+      }
+
+      data.item
+        .filter((item) => item.done == filter)
+        .map((statusFiltered) => {
+          // console.log('statusFiltered', statusFiltered);
+          tampungan.item.push(statusFiltered);
+        });
+
+      // console.log('tampungan', tampungan);
       status = (
         <FlatList
           contentContainerStyle={{paddingBottom: hp(80)}}

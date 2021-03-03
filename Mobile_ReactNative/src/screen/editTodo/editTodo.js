@@ -20,11 +20,13 @@ import moment from 'moment';
 import Buttons from '../../reusable/Buttons/Buttons';
 import styles from './editTodoStyle';
 import {wp, hp} from '../../reusable/responsive/dimen';
+import {todoAction} from '../../redux/Actions/todoAction';
 
 export default function editTodo(props) {
   const dispatch = useDispatch();
 
   const [checkDate, setCheckDate] = useState(false);
+  const [validTOdo, setValidTodo] = useState(true);
   const [othersCategory, setOthersCategory] = useState('');
   const index = props.route.params.index;
   const [data, setData] = useState({
@@ -177,6 +179,16 @@ export default function editTodo(props) {
     }
   };
 
+  let valid;
+  if (validTOdo === false) {
+    valid = (
+      <Text style={styles.validText}>
+        {' '}
+        ** Todo can't be empty and at least 3 letters
+      </Text>
+    );
+  }
+
   return (
     <TouchableWithoutFeedback
       onPress={() => {
@@ -214,6 +226,7 @@ export default function editTodo(props) {
           onChangeText={(e) => setData({...data, ['todo']: e})}
           value={data.todo}
         />
+        {valid}
         <TextInput
           multiline
           style={styles.kolomRespon2}
@@ -226,9 +239,15 @@ export default function editTodo(props) {
         <View style={styles.button}>
           <Buttons
             text={'Update Todo'}
-            press={() =>
-              editTodo(index, data.todo, data.desc, data.category, data.date)
-            }
+            press={() => {
+              if (data.todo === '') {
+                setValidTodo(false);
+              } else if (data.todo.length <= 2) {
+                setValidTodo(false);
+              } else {
+                editTodo(index, data.todo, data.desc, data.category, data.date);
+              }
+            }}
           />
         </View>
       </View>
