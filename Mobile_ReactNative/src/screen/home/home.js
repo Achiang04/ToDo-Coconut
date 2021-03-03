@@ -34,14 +34,16 @@ export default function home({navigation}) {
     };
   }, [navigation]);
 
-  // console.log('Data', data);
-
-  const handleCompleteStorage = async (index) => {
-    console.log('index di render', index);
+  const handleCompleteStorage = async (id) => {
     let item = await AsyncStorage.getItem('@storage_Key').then((item) =>
       JSON.parse(item),
     );
-    item.item[index]['done'] = !item.item[index]['done'];
+
+    item.item.map((data) => {
+      if (data.id === id) {
+        data.done = !data.done;
+      }
+    });
     const jsonValue = JSON.stringify(item);
     await AsyncStorage.setItem('@storage_Key', jsonValue);
     dispatch(todoAction());
@@ -86,7 +88,6 @@ export default function home({navigation}) {
       );
     }
 
-    // console.log(item.category);
     let category;
     if (item.category === undefined || item.category === '') {
       category = null;
@@ -187,7 +188,7 @@ export default function home({navigation}) {
             disabled={false}
             value={item.done}
             tintColors={{true: '#6D26FB', false: '#fff'}}
-            onValueChange={() => handleCompleteStorage(index)}
+            onValueChange={() => handleCompleteStorage(item.id)}
           />
         </View>
         {tambahan}
@@ -228,7 +229,6 @@ export default function home({navigation}) {
 
   let status;
   if (data === null || data.length === 0) {
-    console.log('masuk ke sini ?');
     status = (
       <View style={styles.statusContainer}>
         <Text style={styles.status}>Your todos empty</Text>
@@ -250,11 +250,9 @@ export default function home({navigation}) {
       data.item
         .filter((item) => item.done == filter)
         .map((statusFiltered) => {
-          // console.log('statusFiltered', statusFiltered);
           tampungan.item.push(statusFiltered);
         });
 
-      // console.log('tampungan', tampungan);
       status = (
         <FlatList
           contentContainerStyle={{paddingBottom: hp(80)}}
