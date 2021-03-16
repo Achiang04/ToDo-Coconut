@@ -30,6 +30,8 @@ export default function addTodo({navigation}) {
   const [date, setDate] = useState('');
   const [checkDate, setCheckDate] = useState(false);
   const [validTOdo, setValidTodo] = useState(true);
+  // const [validTOdoLength, setValidTodoLength] = useState(true);
+  const [validCategory, setValidCategory] = useState(true);
 
   const pushdata = async (newTodo, todoDescription, kategori, dueDate) => {
     let temp = await AsyncStorage.getItem('@storage_Key')
@@ -54,7 +56,7 @@ export default function addTodo({navigation}) {
       };
     }
 
-    temp.item.push({
+    temp.item.unshift({
       id: id,
       todo: newTodo,
       description: todoDescription,
@@ -69,6 +71,16 @@ export default function addTodo({navigation}) {
     navigation.replace('Home');
   };
 
+  let categoryValid;
+  if (validCategory === false) {
+    categoryValid = (
+      <Text style={styles.validText}>
+        {/* {' '} */}
+        ** Category can't be empty and at least 3 letters
+      </Text>
+    );
+  }
+
   const pilihCategory = () => {
     let tambahan;
     if (category === 'Others') {
@@ -80,6 +92,7 @@ export default function addTodo({navigation}) {
             placeholderTextColor={'#fff'}
             onChangeText={(e) => setOthersCategory(e)}
           />
+          {categoryValid}
         </View>
       );
     }
@@ -156,11 +169,23 @@ export default function addTodo({navigation}) {
   if (validTOdo === false) {
     valid = (
       <Text style={styles.validText}>
-        {' '}
+        {/* {' '} */}
         ** Todo can't be empty and at least 3 letters
       </Text>
     );
   }
+
+  let validLength;
+  if (newTodo.length === 20) {
+    validLength = (
+      <Text style={styles.validText}>
+        {/* {' '} */}
+        ** Todo is Max you can only input 100
+      </Text>
+    );
+  }
+
+  let secondInput = '';
 
   return (
     <KeyboardAvoidingView
@@ -196,19 +221,27 @@ export default function addTodo({navigation}) {
           <View style={styles.tanggalContainer}>{pilihTanggal()}</View>
           <View>{pilihCategory()}</View>
           <TextInput
+            maxLength={20}
             style={styles.kolomRespon1}
             placeholder={'Todo ...'}
             placeholderTextColor={'#fff'}
             onChangeText={(e) => setNewTodo(e)}
+            returnKeyType="next"
+            onSubmitEditing={() => secondInput.focus()}
+            blurOnSubmit={false}
           />
           {valid}
+          {validLength}
           <TextInput
-            multiline
+            multiline={true}
             style={styles.kolomRespon2}
             placeholder={'Todo Description ...'}
             textAlignVertical={'top'}
             placeholderTextColor={'#fff'}
             onChangeText={(e) => setTodoDescription(e)}
+            ref={(ref) => {
+              secondInput = ref;
+            }}
           />
           <View style={styles.button}>
             <Buttons
@@ -218,6 +251,13 @@ export default function addTodo({navigation}) {
                   setValidTodo(false);
                 } else if (newTodo.length <= 2) {
                   setValidTodo(false);
+                } else if (category === 'Others' && othersCategory === '') {
+                  setValidCategory(false);
+                } else if (
+                  category === 'Others' &&
+                  othersCategory.length <= 2
+                ) {
+                  setValidCategory(false);
                 } else {
                   pushdata(newTodo, todoDescription, category, date);
                 }

@@ -177,7 +177,7 @@ export default function editTodo(props) {
   if (validTOdo === false) {
     valid = (
       <Text style={styles.validText}>
-        {' '}
+        {/* {' '} */}
         ** Todo can't be empty and at least 3 letters
       </Text>
     );

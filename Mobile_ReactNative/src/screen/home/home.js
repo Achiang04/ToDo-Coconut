@@ -8,6 +8,7 @@ import DeleteModal from '../../reusable/modal/deleteModal';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import {useDispatch, useSelector} from 'react-redux';
 import DropDownPicker from 'react-native-dropdown-picker';
+import moment from 'moment';
 
 import styles from './homeStyle';
 import {wp, hp} from '../../reusable/responsive/dimen';
@@ -75,7 +76,7 @@ export default function home({navigation}) {
     }
 
     let lewat;
-    if (item.lewat) {
+    if (item.lewat && item.done === false) {
       lewat = (
         <View style={styles.lewatContainer}>
           <Text style={styles.lewatText}>Missed</Text>
@@ -157,9 +158,13 @@ export default function home({navigation}) {
           {lewat}
           {category}
         </View>
-        <Text style={item.done ? styles.todoTextSelected : styles.todoText}>
-          {item.todo}
-        </Text>
+        <View style={styles.validation}>
+          <Text
+            numberOfLines={item.id === selectedId ? null : 1}
+            style={item.done ? styles.todoTextSelected : styles.todoText}>
+            {item.todo}
+          </Text>
+        </View>
         <TouchableOpacity
           style={styles.edit}
           onPress={() =>
@@ -200,6 +205,9 @@ export default function home({navigation}) {
             {label: 'All', value: 'All'},
             {label: 'Done', value: 'true'},
             {label: 'On Progress', value: 'false'},
+            {label: 'Today', value: 'today'},
+            {label: 'Tommorow', value: 'tommorow'},
+            {label: 'No Date', value: 'none'},
           ]}
           style={styles.dropStyle}
           dropDownStyle={{backgroundColor: '#6D26FB'}}
@@ -235,18 +243,48 @@ export default function home({navigation}) {
         item: [],
       };
 
+      console.log(tampungan);
+
+      const now = moment().format('YYYY-MM-DD');
+
       let filter;
       if (statusFilter === 'true') {
         filter = true;
-      } else {
+      } else if (statusFilter === 'false') {
         filter = false;
+      } else if (statusFilter === 'tommorow') {
+        filter = 'tommorow';
+      } else if (statusFilter === 'today') {
+        filter = 'today';
+      } else if (statusFilter === 'none') {
+        filter = 'none';
       }
 
-      data.item
-        .filter((item) => item.done == filter)
-        .map((statusFiltered) => {
-          tampungan.item.push(statusFiltered);
-        });
+      if (filter === true || filter === false) {
+        data.item
+          .filter((item) => item.done === filter)
+          .map((statusFiltered) => {
+            tampungan.item.push(statusFiltered);
+          });
+      } else if (filter === 'tommorow') {
+        data.item
+          .filter((item) => moment(item.dueTime).isAfter(now))
+          .map((statusFiltered) => {
+            tampungan.item.push(statusFiltered);
+          });
+      } else if (filter === 'today') {
+        data.item
+          .filter((item) => moment(item.dueTime).isSame(now))
+          .map((statusFiltered) => {
+            tampungan.item.push(statusFiltered);
+          });
+      } else if (filter === 'none') {
+        data.item
+          .filter((item) => item.dueTime === '')
+          .map((statusFiltered) => {
+            tampungan.item.push(statusFiltered);
+          });
+      }
 
       if (tampungan.item.length === 0) {
         status = (

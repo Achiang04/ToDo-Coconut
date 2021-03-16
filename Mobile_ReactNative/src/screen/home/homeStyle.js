@@ -30,6 +30,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: RFPercentage(2.5),
     textDecorationLine: 'line-through',
+    // width: wp(100),
   },
   todoContainerSelected: {
     padding: wp(15),
@@ -132,6 +133,9 @@ const styles = StyleSheet.create({
   labelStyle: {
     fontSize: RFPercentage(2.2),
     color: '#fff',
+  },
+  validation: {
+    width: wp(200),
   },
 });
 
